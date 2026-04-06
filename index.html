@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#0A1628">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>NaijaTriageAI — Chest Pain Triage</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0A1628;
+    --surface: #111E35;
+    --surface2: #172340;
+    --border: rgba(255,255,255,0.08);
+    --accent: #3B82F6;
+    --accent2: #60A5FA;
+    --text: #F0F4FF;
+    --muted: #8899BB;
+    --danger: #EF4444;
+    --warning: #F59E0B;
+    --ok: #10B981;
+    --esi1: #B91C1C;
+    --esi2: #C2410C;
+    --esi3: #B45309;
+    --esi4: #1D4ED8;
+    --esi5: #047857;
+    --mono: 'Space Mono', monospace;
+    --sans: 'DM Sans', sans-serif;
+    --radius: 12px;
+    --radius-sm: 8px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding-bottom: 80px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 16px 12px;
+    position: sticky; top: 0; z-index: 100;
+  }
+  .header-top { display: flex; align-items: center; justify-content: space-between; }
+  .header-brand { font-family: var(--mono); font-size: 13px; color: var(--accent2); letter-spacing: 0.5px; }
+  .header-pid {
+    font-family: var(--mono); font-size: 10px;
+    background: rgba(59,130,246,0.15); color: var(--accent2);
+    padding: 3px 8px; border-radius: 20px; border: 1px solid rgba(59,130,246,0.3);
+  }
+  .header-sub { font-size: 11px; color: var(--muted); margin-top: 4px; }
+
+  /* ── BOTTOM NAV ── */
+  .bottom-nav {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: var(--surface); border-top: 1px solid var(--border);
+    display: flex; height: 62px; z-index: 100;
+  }
+  .nav-btn {
+    flex: 1; display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    font-size: 10px; color: var(--muted);
+    text-decoration: none; font-weight: 500; gap: 4px;
+    cursor: pointer; border: none; background: none;
+    transition: color 0.2s;
+  }
+  .nav-btn.active { color: var(--accent2); }
+  .nav-btn svg { width: 20px; height: 20px; }
+
+  /* ── CONTAINER ── */
+  .container { padding: 16px; max-width: 520px; margin: 0 auto; }
+
+  /* ── STAGE INDICATOR ── */
+  .stage-bar {
+    display: flex; gap: 6px; margin-bottom: 20px;
+  }
+  .stage-dot {
+    flex: 1; height: 3px; border-radius: 2px;
+    background: var(--border); transition: background 0.3s;
+  }
+  .stage-dot.active { background: var(--accent); }
+  .stage-dot.done { background: var(--ok); }
+
+  /* ── SECTION LABEL ── */
+  .label {
+    font-family: var(--mono); font-size: 9px; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--muted);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 6px; margin: 20px 0 10px;
+  }
+
+  /* ── INPUTS ── */
+  .field-label {
+    font-size: 12px; color: var(--muted); display: block;
+    margin: 10px 0 4px; font-weight: 500;
+  }
+  .input {
+    width: 100%; padding: 11px 13px;
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: var(--radius-sm); color: var(--text);
+    font-size: 14px; font-family: var(--sans);
+    transition: border-color 0.2s; appearance: none;
+  }
+  .input:focus { outline: none; border-color: var(--accent); }
+  select.input { cursor: pointer; }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+  /* ── BUTTONS ── */
+  .btn-primary {
+    width: 100%; background: var(--accent); color: white;
+    padding: 14px; border: none; border-radius: var(--radius);
+    font-size: 15px; font-weight: 600; cursor: pointer;
+    margin-top: 18px; font-family: var(--sans);
+    transition: background 0.2s, transform 0.1s;
+  }
+  .btn-primary:active { background: #2563EB; transform: scale(0.99); }
+  .btn-secondary {
+    background: var(--surface2); color: var(--text);
+    padding: 12px 20px; border: 1px solid var(--border);
+    border-radius: var(--radius-sm); font-size: 14px;
+    cursor: pointer; font-family: var(--sans);
+    transition: background 0.2s;
+  }
+  .btn-row { display: flex; gap: 10px; margin-top: 18px; align-items: center; }
+  .btn-row .btn-primary { flex: 1; margin-top: 0; }
+
+  /* ── BOXES ── */
+  .info-box {
+    background: rgba(59,130,246,0.08); border-left: 3px solid var(--accent);
+    padding: 9px 11px; border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    font-size: 12px; margin-bottom: 8px; line-height: 1.6; color: var(--accent2);
+  }
+  .warn-box {
+    background: rgba(245,158,11,0.08); border-left: 3px solid var(--warning);
+    padding: 9px 11px; border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    font-size: 12px; margin-bottom: 8px; line-height: 1.6; color: #FCD34D;
+  }
+  .ok-box {
+    background: rgba(16,185,129,0.08); border-left: 3px solid var(--ok);
+    padding: 9px 11px; border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    font-size: 12px; margin-bottom: 8px; line-height: 1.6; color: #6EE7B7;
+  }
+  .err-box {
+    background: rgba(239,68,68,0.08); border-left: 3px solid var(--danger);
+    padding: 9px 11px; border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    font-size: 12px; margin-bottom: 8px; line-height: 1.6; color: #FCA5A5;
+  }
+
+  /* ── PATIENT STRIP ── */
+  .patient-strip {
+    background: var(--surface2); border: 1px solid var(--border);
+    padding: 10px 12px; border-radius: var(--radius-sm);
+    font-size: 12px; margin-bottom: 12px; color: var(--muted);
+    font-family: var(--mono); line-height: 1.7;
+  }
+  .patient-strip span { color: var(--text); }
+
+  /* ── QUESTION ROWS ── */
+  .q-row {
+    display: flex; justify-content: space-between;
+    align-items: center; padding: 11px 0;
+    border-bottom: 1px solid var(--border); gap: 12px;
+  }
+  .q-text { font-size: 13px; flex: 1; line-height: 1.4; }
+  .radio-group { display: flex; gap: 10px; flex-shrink: 0; }
+  .radio-label {
+    font-size: 13px; display: flex; align-items: center;
+    gap: 5px; cursor: pointer; color: var(--muted);
+  }
+  input[type=radio]:checked + span { color: var(--text); }
+
+  /* ── CHECKBOX GRID ── */
+  .check-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
+  .check-label {
+    font-size: 13px; display: flex; align-items: center;
+    gap: 7px; cursor: pointer; padding: 8px 10px;
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: var(--radius-sm); transition: border-color 0.2s;
+  }
+  .check-label:has(input:checked) { border-color: var(--accent); background: rgba(59,130,246,0.08); }
+  input[type=checkbox], input[type=radio] { accent-color: var(--accent); width: 15px; height: 15px; }
+
+  /* ── ESI CARD ── */
+  .esi-card {
+    text-align: center; padding: 28px 16px;
+    border-radius: var(--radius); color: white; margin-bottom: 16px;
+    position: relative; overflow: hidden;
+  }
+  .esi-card::before {
+    content: ''; position: absolute; inset: 0;
+    background: rgba(255,255,255,0.05);
+  }
+  .esi-num { font-size: 72px; font-weight: 700; line-height: 1; font-family: var(--mono); }
+  .esi-name { font-size: 18px; font-weight: 600; margin-top: 6px; letter-spacing: 1px; }
+  .esi-time { font-size: 12px; opacity: 0.8; margin-top: 4px; }
+
+  /* ── PROB BARS ── */
+  .prob-row { display: flex; align-items: center; gap: 8px; margin-bottom: 7px; }
+  .prob-label { font-size: 11px; width: 140px; flex-shrink: 0; color: var(--muted); font-family: var(--mono); }
+  .prob-bar-wrap { flex: 1; background: var(--surface2); border-radius: 3px; height: 8px; }
+  .prob-bar { background: var(--accent); border-radius: 3px; height: 8px; transition: width 0.6s ease; }
+  .prob-pct { font-size: 11px; width: 38px; text-align: right; font-family: var(--mono); color: var(--muted); }
+
+  /* ── DIFFERENTIALS ── */
+  .diff-item {
+    background: rgba(239,68,68,0.06); border: 1px solid rgba(239,68,68,0.2);
+    padding: 10px 12px; border-radius: var(--radius-sm);
+    margin-bottom: 7px;
+  }
+  .diff-name { font-size: 13px; font-weight: 600; color: #FCA5A5; }
+  .diff-reason { font-size: 11px; color: var(--muted); margin-top: 3px; line-height: 1.4; }
+
+  /* ── AGREE/DISAGREE BADGE ── */
+  .agree-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 12px; border-radius: 20px; font-size: 12px;
+    font-family: var(--mono); margin-bottom: 10px;
+  }
+  .agree-badge.agree { background: rgba(16,185,129,0.1); color: #6EE7B7; border: 1px solid rgba(16,185,129,0.3); }
+  .agree-badge.disagree { background: rgba(245,158,11,0.1); color: #FCD34D; border: 1px solid rgba(245,158,11,0.3); }
+
+  /* ── ANALYTICS ── */
+  .metrics-row { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; margin-bottom: 14px; }
+  .metric-card {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 14px; text-align: center;
+  }
+  .metric-num { font-size: 28px; font-weight: 700; color: var(--accent2); font-family: var(--mono); }
+  .metric-label { font-size: 11px; color: var(--muted); margin-top: 3px; }
+
+  .data-table { width: 100%; border-collapse: collapse; font-size: 11px; }
+  .data-table th {
+    background: var(--surface2); color: var(--muted);
+    padding: 7px 8px; text-align: left; white-space: nowrap;
+    font-family: var(--mono); font-size: 9px; letter-spacing: 1px;
+    border-bottom: 1px solid var(--border);
+  }
+  .data-table td { padding: 6px 8px; border-bottom: 1px solid var(--border); font-size: 11px; }
+  .data-table tr:hover td { background: var(--surface2); }
+
+  /* ── PAGES ── */
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* ── FADE IN ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .page.active { animation: fadeUp 0.25s ease; }
+
+  /* ── LISTS ── */
+  .inv-list { padding-left: 18px; }
+  .inv-list li { font-size: 13px; padding: 3px 0; color: var(--muted); line-height: 1.4; }
+  .inv-list li::marker { color: var(--accent); }
+
+  .drivers-list { padding-left: 18px; }
+  .drivers-list li { font-size: 13px; padding: 3px 0; line-height: 1.4; }
+  .drivers-list li::marker { color: var(--ok); }
+
+  /* ── DISCLAIMER ── */
+  .disclaimer {
+    background: var(--surface2); border: 1px solid var(--border);
+    padding: 10px 12px; border-radius: var(--radius-sm);
+    font-size: 11px; color: var(--muted); line-height: 1.6; margin-top: 12px;
+  }
+  .disclaimer strong { color: var(--warning); }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-top">
+    <div class="header-brand">NaijaTriageAI</div>
+    <div class="header-pid" id="headerPid">—</div>
+  </div>
+  <div class="header-sub" id="headerSub">Nigerian ED · Chest Pain Triage</div>
+</div>
+
+<!-- PAGES -->
+<div class="container">
+
+  <!-- ══ PAGE: STAGE 1 ══ -->
+  <div class="page active" id="pageStage1">
+    <div class="stage-bar">
+      <div class="stage-dot active" id="dot1"></div>
+      <div class="stage-dot" id="dot2"></div>
+      <div class="stage-dot" id="dot3"></div>
+    </div>
+
+    <div class="label">Stage 1 — Patient & Vitals</div>
+    <div class="info-box">Privacy: Do not enter patient name. Use the auto-generated ID.</div>
+
+    <label class="field-label">Facility Level</label>
+    <select class="input" id="facility">
+      <option>Primary Health Centre (PHC)</option>
+      <option>General Hospital</option>
+      <option>Teaching Hospital / Tertiary</option>
+      <option>Private Clinic</option>
+    </select>
+
+    <div class="label">Demographics</div>
+    <div class="two-col">
+      <div>
+        <label class="field-label">Age (years)</label>
+        <input type="number" class="input" id="age" value="45" min="0" max="120">
+      </div>
+      <div>
+        <label class="field-label">Sex</label>
+        <select class="input" id="sex">
+          <option>Male</option><option>Female</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="label">Vitals</div>
+    <div class="two-col">
+      <div>
+        <label class="field-label">Systolic BP (mmHg)</label>
+        <input type="number" class="input" id="sbp" value="130">
+      </div>
+      <div>
+        <label class="field-label">Pulse (bpm)</label>
+        <input type="number" class="input" id="pulse" value="88">
+      </div>
+    </div>
+    <div class="two-col">
+      <div>
+        <label class="field-label">SpO2 (%)</label>
+        <input type="number" class="input" id="spo2" value="97">
+      </div>
+      <div>
+        <label class="field-label">RR (breaths/min)</label>
+        <input type="number" class="input" id="rr" value="18">
+      </div>
+    </div>
+
+    <div class="label">Pain</div>
+    <label class="field-label">Pain Score (0–10)</label>
+    <input type="number" class="input" id="painScore" value="6" min="0" max="10">
+
+    <label class="field-label">Pain Character</label>
+    <select class="input" id="painChar">
+      <option>Squeezing / Pressure</option>
+      <option>Sharp / Stabbing</option>
+      <option>Tearing / Ripping</option>
+      <option>Burning</option>
+      <option>Dull / Aching</option>
+    </select>
+
+    <label class="field-label">Onset</label>
+    <select class="input" id="onset">
+      <option>Sudden (&lt;1 min)</option>
+      <option>Rapid (1–10 min)</option>
+      <option>Gradual (&gt;10 min)</option>
+    </select>
+
+    <label class="field-label">Duration</label>
+    <select class="input" id="duration">
+      <option>&lt; 30 minutes</option>
+      <option>30 min – 12 hours</option>
+      <option>&gt; 12 hours</option>
+      <option>Ongoing</option>
+    </select>
+
+    <button class="btn-primary" onclick="goToStage2()">Continue to Stage 2 →</button>
+  </div>
+
+  <!-- ══ PAGE: STAGE 2 ══ -->
+  <div class="page" id="pageStage2">
+    <div class="stage-bar">
+      <div class="stage-dot done"></div>
+      <div class="stage-dot active"></div>
+      <div class="stage-dot"></div>
+    </div>
+
+    <div class="label">Stage 2 — Targeted Questions</div>
+    <div class="patient-strip" id="patientStrip"></div>
+
+    <div id="questionsContainer"></div>
+
+    <div class="label">Risk Factors</div>
+    <div class="check-grid">
+      <label class="check-label"><input type="checkbox" id="rf_htn"> Hypertension</label>
+      <label class="check-label"><input type="checkbox" id="rf_dm"> Diabetes mellitus</label>
+      <label class="check-label"><input type="checkbox" id="rf_smoke"> Smoking / tobacco</label>
+      <label class="check-label"><input type="checkbox" id="rf_ami"> Previous MI / cardiac</label>
+      <label class="check-label"><input type="checkbox" id="rf_scd"> Sickle cell disease</label>
+      <label class="check-label"><input type="checkbox" id="rf_hiv"> HIV / on ARV therapy</label>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-secondary" onclick="showPage('pageStage1')">← Back</button>
+      <button class="btn-primary" onclick="calculateTriage()">Calculate Triage</button>
+    </div>
+  </div>
+
+  <!-- ══ PAGE: RESULTS ══ -->
+  <div class="page" id="pageResults">
+    <div class="stage-bar">
+      <div class="stage-dot done"></div>
+      <div class="stage-dot done"></div>
+      <div class="stage-dot active"></div>
+    </div>
+
+    <div class="label">Stage 3 — Triage Results</div>
+    <div class="esi-card" id="esiCard">
+      <div class="esi-num" id="esiNum">—</div>
+      <div class="esi-name" id="esiName">—</div>
+      <div class="esi-time" id="esiTime">—</div>
+    </div>
+
+    <div class="label">Clinical Action</div>
+    <div id="esiInstruction" class="info-box"></div>
+
+    <div id="modelAgreement"></div>
+
+    <div class="label">Key Drivers</div>
+    <ul class="drivers-list" id="driversList"></ul>
+
+    <div class="label">Bayesian Posterior Probabilities</div>
+    <div id="posteriorBars"></div>
+
+    <div class="label">Must-Not-Miss Differentials</div>
+    <div id="differentials"></div>
+
+    <div class="label" id="invLabel">Investigations</div>
+    <ul class="inv-list" id="invAvailable"></ul>
+    <div id="invUnavailable"></div>
+    <div id="invRefer"></div>
+
+    <div class="label">Monitoring Plan</div>
+    <ul class="inv-list" id="monitoringList"></ul>
+
+    <div class="label">Nigerian Clinical Context</div>
+    <div id="nigerianContext"></div>
+
+    <div class="disclaimer">
+      <strong>Clinical Responsibility:</strong> Decision support only. This model has not been validated on real Nigerian patient outcomes. Final triage decision rests with the attending clinician.
+    </div>
+
+    <button class="btn-primary" onclick="newPatient()" style="background:var(--ok);">New Patient</button>
+  </div>
+
+  <!-- ══ PAGE: ANALYTICS ══ -->
+  <div class="page" id="pageAnalytics">
+    <div class="label">Analytics</div>
+    <div class="metrics-row">
+      <div class="metric-card"><div class="metric-num" id="statTotal">0</div><div class="metric-label">Total Assessments</div></div>
+      <div class="metric-card"><div class="metric-num" id="statHigh">0</div><div class="metric-label">ESI 1–2 (High)</div></div>
+      <div class="metric-card"><div class="metric-num" id="statPain">—</div><div class="metric-label">Avg Pain Score</div></div>
+      <div class="metric-card"><div class="metric-num" id="statAge">—</div><div class="metric-label">Avg Age</div></div>
+    </div>
+    <div id="analyticsMsg"></div>
+    <div class="label">Recent Assessments</div>
+    <div style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr>
+          <th>TIME</th><th>ESI</th><th>AGE</th><th>SEX</th>
+          <th>BP</th><th>PULSE</th><th>SPO2</th><th>PAIN</th>
+        </tr></thead>
+        <tbody id="analyticsTable"></tbody>
+      </table>
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+  <button class="nav-btn active" id="navTriage" onclick="showNav('triage')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+    Triage
+  </button>
+  <a class="nav-btn" href="mnh.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21.7C5.4 21.7 2 17.4 2 12c0-2.8 1-5.3 2.9-7.1M12 2.3C18.6 2.3 22 6.6 22 12c0 2.8-1 5.3-2.9 7.1"/><circle cx="12" cy="12" r="3"/></svg>
+    MNH
+  </a>
+
+  <button class="nav-btn" id="navAnalytics" onclick="showNav('analytics')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+    Analytics
+  </button>
+</nav>
+
+<script>
+// ══════════════════════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════════════════════
+
+const API_URL = 'https://triage-sync-api.onrender.com/';
+const SYNC_SECRET = 'choose_any_random_string_her'; // same word you chose in Render
+
+let state = {
+  pid: generatePID(),
+  facility: 'Primary Health Centre (PHC)',
+  patient: {},
+  answers: {},
+  riskFactors: {},
+  result: null
+};
+
+let records = JSON.parse(localStorage.getItem('triage_records') || '[]');
+
+// ══════════════════════════════════════════════════════════════
+// CLINICAL DATA
+// ══════════════════════════════════════════════════════════════
+const ESI_LABELS = {
+  1: { name: 'RESUSCITATION', time: 'Immediate — seconds matter' },
+  2: { name: 'EMERGENT', time: 'Seen within 10 minutes' },
+  3: { name: 'URGENT', time: 'Seen within 30 minutes' },
+  4: { name: 'LESS URGENT', time: 'Seen within 60 minutes' },
+  5: { name: 'NON-URGENT', time: 'Can wait up to 2 hours' }
+};
+const ESI_COLORS = { 1:'#B91C1C', 2:'#C2410C', 3:'#B45309', 4:'#1D4ED8', 5:'#047857' };
+const ESI_INSTRUCTIONS = {
+  1: 'Immediate resuscitation. Call senior clinician now. IV access, monitoring, oxygen. Do not leave patient.',
+  2: 'High risk. Seen within 10 minutes. ECG immediately. IV access. Continuous monitoring. Senior review.',
+  3: 'Urgent assessment within 30 minutes. ECG, IV access, analgesia. Serial monitoring.',
+  4: 'Standard priority. Assess within 60 minutes. Investigations as indicated.',
+  5: 'Non-urgent. Can be managed in outpatient setting. Safety-net advice given.'
+};
+
+const TARGETED_QUESTIONS = {
+  'Squeezing / Pressure': [
+    ['Radiation to left arm, shoulder, or jaw?', 'Classic ischaemic radiation pattern'],
+    ['Diaphoresis (sweating) with the pain?', 'Autonomic activation — high-risk feature'],
+    ['Associated nausea or vomiting?', 'Vagal response common in AMI'],
+    ['Relieved by GTN/nitrates if available?', 'Supports ischaemic aetiology'],
+    ['Previous similar episode?', 'Recurrent angina or ACS'],
+    ['Pain worse on exertion?', 'Exertional angina pattern']
+  ],
+  'Sharp / Stabbing': [
+    ['Pain worsens with inspiration (breathing in)?', 'Pleuritic — PE, pericarditis, pneumonia'],
+    ['Positional change affects pain?', 'Pericarditis, MSK, GORD'],
+    ['Haemoptysis (coughing blood)?', 'PE or pulmonary infarction'],
+    ['Recent immobility, long travel, or surgery?', 'DVT/PE risk factors'],
+    ['Fever or productive cough?', 'Pneumonia, pleuritis'],
+    ['Radiation to shoulder tip?', 'Diaphragmatic irritation — haemothorax, pneumothorax']
+  ],
+  'Tearing / Ripping': [
+    ['Pain migrating from chest to back or abdomen?', 'Aortic dissection — must not miss'],
+    ['Sudden maximal severity at onset?', 'Dissection typically immediate peak'],
+    ['Known hypertension or Marfan syndrome?', 'Major aortic dissection risk factors'],
+    ['Pulse or BP difference between arms?', 'Aortic arch involvement'],
+    ['Syncope or near-syncope?', 'Haemodynamic compromise'],
+    ['Neurological symptoms (weakness, speech)?', 'Carotid/vertebral involvement in dissection']
+  ],
+  'Burning': [
+    ['Relieved by antacids or food?', 'GORD pattern'],
+    ['Worse lying flat or after meals?', 'Oesophageal or GORD'],
+    ['Dysphagia (difficulty swallowing)?', 'Oesophageal pathology'],
+    ['Associated epigastric tenderness?', 'PUD, GORD, pancreatitis'],
+    ['Regurgitation of acid/food?', 'GORD'],
+    ['Diaphoresis or radiation to arm?', 'Do not miss ischaemia masquerading as GORD']
+  ],
+  'Dull / Aching': [
+    ['Constant vs intermittent?', 'Constant dull ache raises cardiac/PE concern'],
+    ['Any exertional component?', 'Exertional — cardiac; rest — musculoskeletal or cardiac'],
+    ['Point tenderness on palpation?', 'Musculoskeletal if reproducible'],
+    ['Associated shortness of breath?', 'Cardiac, PE, anaemia in SCD context'],
+    ['Chronic or new onset?', 'New dull ache warrants higher suspicion'],
+    ['Worse at night?', 'Cardiac ischaemia can worsen supine']
+  ]
+};
+
+const DIFFERENTIALS = {
+  'Squeezing / Pressure': [
+    { name: 'Acute MI (STEMI/NSTEMI)', reason: 'Classic presentation — must rule out first' },
+    { name: 'Unstable Angina', reason: 'ACS spectrum — high risk without ST elevation' },
+    { name: 'Hypertensive Emergency', reason: 'High prevalence, often untreated in Nigeria' },
+    { name: 'SCD Vaso-occlusive Crisis', reason: 'Common Nigerian aetiology — check Hb SS status' },
+    { name: 'Pericarditis', reason: 'Pressure-like, may mimic ACS; look for friction rub' }
+  ],
+  'Sharp / Stabbing': [
+    { name: 'Pulmonary Embolism', reason: 'Pleuritic pain + dyspnoea — time-critical' },
+    { name: 'Pneumothorax', reason: 'Sudden sharp pain + absent breath sounds' },
+    { name: 'Pneumonia / Pleuritis', reason: 'Common in Nigeria; pleuritic pain + fever' },
+    { name: 'Pericarditis', reason: 'Worse lying flat, relieved leaning forward' },
+    { name: 'Musculoskeletal', reason: 'Reproducible on palpation — diagnosis of exclusion' }
+  ],
+  'Tearing / Ripping': [
+    { name: 'Aortic Dissection', reason: 'MUST NOT MISS — immediate transfer if suspected' },
+    { name: 'Aortic Aneurysm Rupture', reason: 'Catastrophic — haemodynamic shock + back pain' },
+    { name: 'Oesophageal Rupture', reason: 'Rare but fatal; history of vomiting + procedure' },
+    { name: 'Type B Dissection', reason: 'Descending aorta — may present with back/abdominal pain' },
+    { name: 'Severe Hypertensive Crisis', reason: 'Can cause aortic stress; BP control urgent' }
+  ],
+  'Burning': [
+    { name: 'GORD / Oesophagitis', reason: 'Most common burning chest cause' },
+    { name: 'Peptic Ulcer Disease', reason: 'H. pylori high in Nigeria — consider empiric treatment' },
+    { name: 'NSTEMI', reason: 'Do not miss — burning can mask ischaemia, especially in women' },
+    { name: 'Oesophageal Spasm', reason: 'Can mimic cardiac pain; nitrate-responsive' },
+    { name: 'Hiatus Hernia', reason: 'Common, postprandial burning + regurgitation' }
+  ],
+  'Dull / Aching': [
+    { name: 'Stable Angina', reason: 'Exertional pattern — risk stratify' },
+    { name: 'Musculoskeletal', reason: 'Most common cause but diagnosis of exclusion' },
+    { name: 'Anaemia (SCD/nutritional)', reason: 'High Nigerian prevalence — check Hb' },
+    { name: 'Costochondritis', reason: 'Reproducible tenderness — Tietze syndrome' },
+    { name: 'Anxiety / Psychogenic', reason: 'Common in younger patients — exclusion diagnosis' }
+  ]
+};
+
+const FACILITY_INVESTIGATIONS = {
+  'Primary Health Centre (PHC)': {
+    available: ['Blood pressure and pulse monitoring', 'Pulse oximetry (SpO2)', 'RBS (random blood glucose)', 'Urinalysis', 'Malaria RDT', 'Haemoglobin estimation (HaemoCue if available)', 'Pregnancy test (if female, reproductive age)'],
+    unavailable: ['ECG', 'Troponin / cardiac enzymes', 'CXR', 'Echo', 'CT angiography'],
+    refer_if: 'ESI 1 or 2, suspected ACS, aortic dissection, PE, or haemodynamic instability'
+  },
+  'General Hospital': {
+    available: ['12-lead ECG', 'FBC, electrolytes, renal function', 'Random blood glucose', 'Pulse oximetry', 'CXR (portable or department)', 'Troponin I or T (if available)', 'Urinalysis', 'Malaria RDT', 'D-dimer (selected cases)'],
+    unavailable: ['CT pulmonary angiography', 'Coronary angiography', 'Echocardiography (may not be 24hr)'],
+    refer_if: 'Confirmed STEMI if no PCI capability, aortic dissection, haemodynamic instability requiring ICU'
+  },
+  'Teaching Hospital / Tertiary': {
+    available: ['12-lead ECG + continuous monitoring', 'Serial troponins (0h/3h/6h)', 'FBC, LFT, RFT, coagulation', 'CXR', 'Echo (cardiology)', 'CT pulmonary angiography', 'CT aortography', 'Coronary angiography (if cath lab available)', 'D-dimer, BNP/NTpro-BNP'],
+    unavailable: [],
+    refer_if: null
+  },
+  'Private Clinic': {
+    available: ['12-lead ECG', 'Pulse oximetry', 'RBS', 'FBC if in-house lab', 'Troponin rapid test (if stocked)', 'CXR (if X-ray unit available)'],
+    unavailable: ['CT angiography', 'Echo', 'Coronary angiography'],
+    refer_if: 'ESI 1 or 2, confirmed ACS, haemodynamic instability'
+  }
+};
+
+const MONITORING = {
+  1: ['Continuous cardiac monitoring — do not leave patient', 'BP and pulse every 2 minutes until stable', 'SpO2 continuous', 'IV access x2 large-bore immediately', 'Senior clinician at bedside'],
+  2: ['BP, pulse, SpO2 every 5 minutes', 'Cardiac monitoring', 'IV access', 'Serial ECG at 0 and 30 minutes', 'Senior review within 10 minutes'],
+  3: ['BP and pulse every 15 minutes', 'Repeat ECG if initial normal', 'SpO2 monitoring', 'Pain reassessment every 30 minutes'],
+  4: ['BP and pulse every 30–60 minutes', 'Reassess if worsening', 'Oral analgesia as appropriate'],
+  5: ['Single set of vitals', 'Safety-net advice', 'Return if symptoms worsen or change character']
+};
+
+// ══════════════════════════════════════════════════════════════
+// BAYESIAN ENGINE (mirrors bayesian_model.py exactly)
+// ══════════════════════════════════════════════════════════════
+
+// Priors: P(ESI=1..5)
+const PRIORS = [0.05, 0.20, 0.40, 0.25, 0.10];
+
+// Feature likelihood tables P(feature | ESI)
+const LIKELIHOODS = {
+  // Vitals-derived
+  sbp_low:          [0.70, 0.45, 0.15, 0.05, 0.02],  // SBP < 90
+  sbp_high:         [0.30, 0.40, 0.35, 0.15, 0.05],  // SBP > 180
+  tachycardia:      [0.75, 0.55, 0.30, 0.10, 0.04],  // Pulse > 100
+  bradycardia:      [0.20, 0.18, 0.08, 0.04, 0.02],  // Pulse < 50
+  spo2_low:         [0.80, 0.55, 0.25, 0.08, 0.02],  // SpO2 < 94
+  spo2_vlow:        [0.90, 0.40, 0.10, 0.03, 0.01],  // SpO2 < 88
+  high_rr:          [0.72, 0.50, 0.22, 0.08, 0.02],  // RR > 24
+  pain_severe:      [0.65, 0.55, 0.35, 0.15, 0.05],  // Pain >= 8
+  pain_moderate:    [0.20, 0.30, 0.45, 0.35, 0.15],  // Pain 5-7
+  // Onset/character
+  sudden_onset:     [0.55, 0.40, 0.20, 0.08, 0.03],
+  tearing:          [0.25, 0.30, 0.15, 0.05, 0.02],  // Tearing character
+  squeezing:        [0.35, 0.45, 0.30, 0.15, 0.08],  // Squeezing character
+  // Targeted question answers (Yes = present)
+  radiation:        [0.50, 0.55, 0.30, 0.10, 0.04],
+  diaphoresis:      [0.65, 0.50, 0.20, 0.06, 0.02],
+  nausea:           [0.45, 0.40, 0.25, 0.12, 0.05],
+  pleuritic:        [0.35, 0.38, 0.30, 0.15, 0.06],
+  haemoptysis:      [0.30, 0.35, 0.20, 0.08, 0.02],
+  migrating:        [0.40, 0.35, 0.15, 0.05, 0.02],
+  syncope:          [0.55, 0.38, 0.18, 0.06, 0.02],
+  neuro_sx:         [0.40, 0.30, 0.12, 0.04, 0.01],
+  exertional:       [0.25, 0.35, 0.30, 0.20, 0.10],
+  positional:       [0.15, 0.20, 0.25, 0.30, 0.25],
+  relieved_gtn:     [0.30, 0.40, 0.25, 0.10, 0.04],
+  dysphagia:        [0.10, 0.15, 0.20, 0.25, 0.20],
+  // Risk factors
+  htn:              [0.40, 0.50, 0.45, 0.35, 0.20],
+  dm:               [0.35, 0.40, 0.38, 0.28, 0.15],
+  smoking:          [0.30, 0.38, 0.35, 0.25, 0.15],
+  prior_ami:        [0.50, 0.55, 0.40, 0.20, 0.08],
+  // Nigerian-specific priors
+  scd:              [0.35, 0.40, 0.30, 0.15, 0.05],  // SCD — elevated acuity
+  hiv:              [0.25, 0.32, 0.28, 0.18, 0.08],  // HIV cardiac risk
+};
+
+function bayesianESI(features) {
+  let posterior = [...PRIORS];
+
+  for (const [feat, present] of Object.entries(features)) {
+    const lk = LIKELIHOODS[feat];
+    if (!lk) continue;
+    for (let i = 0; i < 5; i++) {
+      posterior[i] *= present ? lk[i] : (1.0 - lk[i]);
+    }
+    // Normalise to prevent underflow
+    const s = posterior.reduce((a, b) => a + b, 0);
+    if (s > 0) posterior = posterior.map(p => p / s);
+  }
+
+  const s = posterior.reduce((a, b) => a + b, 0);
+  posterior = posterior.map(p => p / s);
+  return posterior;
+}
+
+function extractFeatures(patient, answers, riskFactors) {
+  const features = {};
+  const sbp = patient.sbp, pulse = patient.pulse,
+        spo2 = patient.spo2, rr = patient.rr, pain = patient.painScore;
+
+  features.sbp_low        = sbp < 90;
+  features.sbp_high       = sbp > 180;
+  features.tachycardia    = pulse > 100;
+  features.bradycardia    = pulse < 50;
+  features.spo2_low       = spo2 < 94;
+  features.spo2_vlow      = spo2 < 88;
+  features.high_rr        = rr > 24;
+  features.pain_severe    = pain >= 8;
+  features.pain_moderate  = pain >= 5 && pain < 8;
+  features.sudden_onset   = patient.onset.includes('Sudden');
+  features.tearing        = patient.painChar.includes('Tearing');
+  features.squeezing      = patient.painChar.includes('Squeezing');
+
+  // Map targeted question answers
+  const qMap = {
+    0: { 'Squeezing / Pressure': 'radiation',  'Tearing / Ripping': 'migrating',  'Sharp / Stabbing': 'pleuritic',  'Burning': 'relieved_gtn', 'Dull / Aching': 'exertional' },
+    1: { 'Squeezing / Pressure': 'diaphoresis','Tearing / Ripping': 'sudden_onset','Sharp / Stabbing': 'positional', 'Burning': 'positional',   'Dull / Aching': 'exertional' },
+    2: { 'Squeezing / Pressure': 'nausea',     'Tearing / Ripping': 'htn',         'Sharp / Stabbing': 'haemoptysis','Burning': 'dysphagia',    'Dull / Aching': 'pleuritic'  },
+    3: { 'Squeezing / Pressure': 'relieved_gtn','Tearing / Ripping': 'syncope',    'Sharp / Stabbing': 'exertional', 'Burning': 'nausea',       'Dull / Aching': 'radiation'  },
+    4: { 'Squeezing / Pressure': 'exertional', 'Tearing / Ripping': 'radiation',   'Sharp / Stabbing': 'nausea',     'Burning': 'diaphoresis',  'Dull / Aching': 'positional' },
+    5: { 'Squeezing / Pressure': 'radiation',  'Tearing / Ripping': 'neuro_sx',    'Sharp / Stabbing': 'radiation',  'Burning': 'radiation',    'Dull / Aching': 'exertional' },
+  };
+
+  for (let i = 0; i < 6; i++) {
+    const feat = qMap[i]?.[patient.painChar];
+    if (feat) features[feat] = (answers[i] === 'Yes');
+  }
+
+  features.htn       = riskFactors.htn;
+  features.dm        = riskFactors.dm;
+  features.smoking   = riskFactors.smoke;
+  features.prior_ami = riskFactors.ami;
+  features.scd       = riskFactors.scd;
+  features.hiv       = riskFactors.hiv;
+
+  return features;
+}
+
+function calcESI(posterior) {
+  // Hard overrides for critical vitals
+  const p = state.patient;
+  if (p.sbp < 80 || p.spo2 < 85 || p.pulse > 150 || p.pulse < 40) return 1;
+  return posterior.indexOf(Math.max(...posterior)) + 1;
+}
+
+// ══════════════════════════════════════════════════════════════
+// DRIVER EXPLANATION
+// ══════════════════════════════════════════════════════════════
+function getDrivers(patient, answers, riskFactors) {
+  const drivers = [];
+  if (patient.sbp < 90) drivers.push('Hypotension (SBP ' + patient.sbp + ' mmHg) — haemodynamic compromise');
+  if (patient.sbp > 180) drivers.push('Severe hypertension (SBP ' + patient.sbp + ' mmHg) — hypertensive emergency');
+  if (patient.pulse > 100) drivers.push('Tachycardia (' + patient.pulse + ' bpm) — compensatory or primary arrhythmia');
+  if (patient.spo2 < 94) drivers.push('Low SpO2 (' + patient.spo2 + '%) — hypoxaemia');
+  if (patient.rr > 24) drivers.push('Tachypnoea (RR ' + patient.rr + ') — respiratory compromise');
+  if (patient.painScore >= 8) drivers.push('Severe pain score (' + patient.painScore + '/10)');
+  if (patient.onset.includes('Sudden')) drivers.push('Sudden onset — aortic, PE, or ischaemic aetiology');
+  if (patient.painChar.includes('Tearing')) drivers.push('Tearing character — aortic dissection must be excluded');
+  if (riskFactors.scd) drivers.push('Sickle cell disease — vaso-occlusive crisis, acute chest syndrome');
+  if (riskFactors.hiv) drivers.push('HIV status — HIV-associated cardiomyopathy, accelerated atherosclerosis');
+  if (riskFactors.ami) drivers.push('Previous MI — higher baseline cardiac risk');
+  if (answers[0] === 'Yes' && patient.painChar.includes('Squeezing')) drivers.push('Radiation to arm/jaw — classic ischaemic feature');
+  if (answers[1] === 'Yes' && patient.painChar.includes('Squeezing')) drivers.push('Diaphoresis — autonomic activation, high-risk ACS feature');
+  if (drivers.length === 0) drivers.push('No single high-risk feature — lower acuity presentation');
+  return drivers.slice(0, 5);
+}
+
+// ══════════════════════════════════════════════════════════════
+// NIGERIAN CONTEXT NOTES
+// ══════════════════════════════════════════════════════════════
+function getNigerianContext(patient, riskFactors) {
+  const notes = [];
+  if (riskFactors.scd) {
+    notes.push({ type: 'warning', text: 'SCD patient: Acute Chest Syndrome (ACS-SCD) is a life-threatening complication. Give O2, analgesia, hydration. Low threshold for exchange transfusion referral.' });
+  }
+  if (riskFactors.hiv) {
+    notes.push({ type: 'info', text: 'HIV on ARVs: Check for drug interactions (lopinavir/ritonavir prolong QT). HIV cardiomyopathy and accelerated CAD are local concerns.' });
+  }
+  if (patient.sbp > 160) {
+    notes.push({ type: 'warning', text: 'Hypertensive emergency: High prevalence of undiagnosed hypertension in Nigeria. Consider hypertensive heart disease as primary aetiology.' });
+  }
+  if (patient.painChar.includes('Tearing')) {
+    notes.push({ type: 'warning', text: 'Aortic dissection: Limited CT access at most Nigerian centres. Stabilise, control BP (target SBP 100–120), arrange urgent tertiary transfer.' });
+  }
+  if (patient.onset.includes('Sudden') && patient.spo2 < 95) {
+    notes.push({ type: 'warning', text: 'PE consideration: D-dimer and CTPA may not be available. Clinical Wells score and empiric anticoagulation decision required if high suspicion.' });
+  }
+  notes.push({ type: 'info', text: 'Delayed presentation is common in Nigeria due to transport barriers and patent medicine vendor use. Factor chronicity into risk assessment.' });
+  return notes;
+}
+
+// ══════════════════════════════════════════════════════════════
+// UI HELPERS
+// ══════════════════════════════════════════════════════════════
+function generatePID() {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  let id = 'NGT-';
+  for (let i = 0; i < 6; i++) id += chars[Math.floor(Math.random() * chars.length)];
+  return id;
+}
+
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function showNav(which) {
+  document.getElementById('navTriage').classList.toggle('active', which === 'triage');
+  document.getElementById('navAnalytics').classList.toggle('active', which === 'analytics');
+  if (which === 'analytics') {
+    renderAnalytics();
+    showPage('pageAnalytics');
+  } else {
+    showPage('pageStage1');
+  }
+}
+
+// ══════════════════════════════════════════════════════════════
+// STAGE TRANSITIONS
+// ══════════════════════════════════════════════════════════════
+function goToStage2() {
+  state.patient = {
+    sbp: +document.getElementById('sbp').value,
+    pulse: +document.getElementById('pulse').value,
+    spo2: +document.getElementById('spo2').value,
+    rr: +document.getElementById('rr').value,
+    painScore: +document.getElementById('painScore').value,
+    painChar: document.getElementById('painChar').value,
+    onset: document.getElementById('onset').value,
+    duration: document.getElementById('duration').value,
+    age: +document.getElementById('age').value,
+    sex: document.getElementById('sex').value,
+  };
+  state.facility = document.getElementById('facility').value;
+  document.getElementById('headerSub').textContent = 'Nigerian ED · ' + state.facility;
+
+  // Render patient strip
+  const p = state.patient;
+  document.getElementById('patientStrip').innerHTML =
+    `${p.age}y ${p.sex} &nbsp;|&nbsp; <span>BP ${p.sbp} mmHg</span> &nbsp;|&nbsp; <span>Pulse ${p.pulse} bpm</span> &nbsp;|&nbsp; <span>SpO2 ${p.spo2}%</span> &nbsp;|&nbsp; <span>Pain ${p.painScore}/10</span> &nbsp;|&nbsp; <span>${p.painChar}</span>`;
+
+  // Render targeted questions
+  const qs = TARGETED_QUESTIONS[p.painChar] || TARGETED_QUESTIONS['Dull / Aching'];
+  const container = document.getElementById('questionsContainer');
+  container.innerHTML = '';
+  qs.forEach(([q, tip], i) => {
+    container.innerHTML += `
+      <div class="q-row">
+        <span class="q-text" title="${tip}">${q}</span>
+        <div class="radio-group">
+          <label class="radio-label"><input type="radio" name="q${i}" value="No" checked> <span>No</span></label>
+          <label class="radio-label"><input type="radio" name="q${i}" value="Yes"> <span>Yes</span></label>
+        </div>
+      </div>`;
+  });
+
+  showPage('pageStage2');
+}
+
+function calculateTriage() {
+  const p = state.patient;
+
+  // Collect answers
+  const qs = TARGETED_QUESTIONS[p.painChar] || TARGETED_QUESTIONS['Dull / Aching'];
+  const answers = {};
+  qs.forEach((_, i) => {
+    const checked = document.querySelector(`input[name="q${i}"]:checked`);
+    answers[i] = checked ? checked.value : 'No';
+  });
+
+  const riskFactors = {
+    htn: document.getElementById('rf_htn').checked,
+    dm: document.getElementById('rf_dm').checked,
+    smoke: document.getElementById('rf_smoke').checked,
+    ami: document.getElementById('rf_ami').checked,
+    scd: document.getElementById('rf_scd').checked,
+    hiv: document.getElementById('rf_hiv').checked,
+  };
+
+  state.answers = answers;
+  state.riskFactors = riskFactors;
+
+  // Run Bayesian engine
+  const features = extractFeatures(p, answers, riskFactors);
+  const posterior = bayesianESI(features);
+  const esi = calcESI(posterior);
+
+  state.result = { esi, posterior };
+
+  // Save to local storage
+// To this — add markForSync() and module field:
+records.unshift(markForSync({
+  timestamp: new Date().toISOString(),
+  module: 'chest_pain',
+  pid: state.pid,
+  facility: state.facility,
+  age: p.age, sex: p.sex,
+  sbp: p.sbp, pulse: p.pulse, spo2: p.spo2,
+  painScore: p.painScore, painChar: p.painChar,
+  esi: esi,
+  riskScd: riskFactors.scd || false,
+  riskHiv: riskFactors.hiv || false,
+}));
+  if (records.length > 200) records = records.slice(0, 200);
+  localStorage.setItem('triage_records', JSON.stringify(records));
+
+if (navigator.onLine) syncPending(); // ← ADD THIS HERE
+
+  renderResults(esi, posterior, p, answers, riskFactors);
+  showPage('pageResults');
+  }
+
+// ══════════════════════════════════════════════════════════════
+// RENDER RESULTS
+// ══════════════════════════════════════════════════════════════
+function renderResults(esi, posterior, patient, answers, riskFactors) {
+  // ESI card
+  document.getElementById('esiCard').style.background = ESI_COLORS[esi];
+  document.getElementById('esiNum').textContent = esi;
+  document.getElementById('esiName').textContent = ESI_LABELS[esi].name;
+  document.getElementById('esiTime').textContent = ESI_LABELS[esi].time;
+  document.getElementById('esiInstruction').textContent = ESI_INSTRUCTIONS[esi];
+
+  // Model agreement placeholder (single model here)
+  document.getElementById('modelAgreement').innerHTML =
+    `<div class="agree-badge agree">✓ Bayesian model · ESI ${esi} · ${(posterior[esi-1]*100).toFixed(1)}% posterior probability</div>`;
+
+  // Drivers
+  const drivers = getDrivers(patient, answers, riskFactors);
+  document.getElementById('driversList').innerHTML = drivers.map(d => `<li>${d}</li>`).join('');
+
+  // Posterior bars
+  const names = ['','Resuscitation','Emergent','Urgent','Less Urgent','Non-Urgent'];
+  document.getElementById('posteriorBars').innerHTML = posterior.map((p, i) =>
+    `<div class="prob-row">
+      <span class="prob-label">ESI ${i+1} — ${names[i+1]}</span>
+      <div class="prob-bar-wrap"><div class="prob-bar" style="width:${(p*100).toFixed(1)}%"></div></div>
+      <span class="prob-pct">${(p*100).toFixed(1)}%</span>
+    </div>`
+  ).join('');
+
+  // Differentials
+  const diffs = DIFFERENTIALS[patient.painChar] || DIFFERENTIALS['Dull / Aching'];
+  document.getElementById('differentials').innerHTML = diffs.slice(0, 5).map((d, i) =>
+    `<div class="diff-item">
+      <div class="diff-name">${i+1}. ${d.name}</div>
+      <div class="diff-reason">${d.reason}</div>
+    </div>`
+  ).join('');
+
+  // Investigations
+  const facilityKey = state.facility;
+  const inv = FACILITY_INVESTIGATIONS[facilityKey] || FACILITY_INVESTIGATIONS['Primary Health Centre (PHC)'];
+  document.getElementById('invLabel').textContent = `Investigations — ${facilityKey.split(' ')[0]}`;
+  document.getElementById('invAvailable').innerHTML = inv.available.map(i => `<li>${i}</li>`).join('');
+
+  const unavailEl = document.getElementById('invUnavailable');
+  if (inv.unavailable.length > 0) {
+    unavailEl.innerHTML = `<div class="label" style="color:var(--warning)">Not typically available — refer if needed</div><ul class="inv-list">${inv.unavailable.map(i => `<li>${i}</li>`).join('')}</ul>`;
+  } else { unavailEl.innerHTML = ''; }
+
+  const referEl = document.getElementById('invRefer');
+  if (inv.refer_if) {
+    referEl.innerHTML = `<div class="warn-box">Refer if: ${inv.refer_if}</div>`;
+  } else { referEl.innerHTML = ''; }
+
+  // Monitoring
+  document.getElementById('monitoringList').innerHTML =
+    (MONITORING[esi] || MONITORING[3]).map(m => `<li>${m}</li>`).join('');
+
+  // Nigerian context
+  const notes = getNigerianContext(patient, riskFactors);
+  document.getElementById('nigerianContext').innerHTML = notes.map(n =>
+    `<div class="${n.type === 'warning' ? 'warn-box' : 'info-box'}">${n.text}</div>`
+  ).join('');
+}
+
+// ══════════════════════════════════════════════════════════════
+// ANALYTICS
+// ══════════════════════════════════════════════════════════════
+function renderAnalytics() {
+  const total = records.length;
+  const high = records.filter(r => r.esi <= 2).length;
+  const avgPain = total ? (records.reduce((s, r) => s + r.painScore, 0) / total).toFixed(1) : '—';
+  const avgAge = total ? (records.reduce((s, r) => s + r.age, 0) / total).toFixed(1) : '—';
+
+  document.getElementById('statTotal').textContent = total;
+  document.getElementById('statHigh').textContent = high;
+  document.getElementById('statPain').textContent = avgPain;
+  document.getElementById('statAge').textContent = avgAge;
+
+  const msgEl = document.getElementById('analyticsMsg');
+  if (total < 200) {
+    msgEl.innerHTML = `<div class="info-box">${200 - total} more assessments to build a meaningful dataset.</div>`;
+  } else {
+    msgEl.innerHTML = `<div class="ok-box">Dataset building up. Export records for analysis.</div>`;
+  }
+
+  const tbody = document.getElementById('analyticsTable');
+  tbody.innerHTML = records.slice(0, 30).map(r => `
+    <tr>
+      <td>${r.timestamp.slice(11,16)}</td>
+      <td><b>${r.esi}</b></td>
+      <td>${r.age}</td><td>${r.sex}</td>
+      <td>${r.sbp}</td><td>${r.pulse}</td><td>${r.spo2}</td>
+      <td>${r.painScore}/10</td>
+    </tr>`).join('');
+}
+
+// ══════════════════════════════════════════════════════════════
+// NEW PATIENT
+// ══════════════════════════════════════════════════════════════
+function newPatient() {
+  state.pid = generatePID();
+  state.patient = {};
+  state.answers = {};
+  state.riskFactors = {};
+  state.result = null;
+  // Reset form fields to defaults
+  document.getElementById('age').value = 45;
+  document.getElementById('sbp').value = 130;
+  document.getElementById('pulse').value = 88;
+  document.getElementById('spo2').value = 97;
+  document.getElementById('rr').value = 18;
+  document.getElementById('painScore').value = 6;
+  document.getElementById('rf_htn').checked = false;
+  document.getElementById('rf_dm').checked = false;
+  document.getElementById('rf_smoke').checked = false;
+  document.getElementById('rf_ami').checked = false;
+  document.getElementById('rf_scd').checked = false;
+  document.getElementById('rf_hiv').checked = false;
+  document.getElementById('headerPid').textContent = state.pid;
+  showNav('triage');
+  showPage('pageStage1');
+}
+
+// ══════════════════════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════════════════════
+document.getElementById('headerPid').textContent = state.pid;
+  function markForSync(record) {
+  record.synced = false;
+  return record;
+}
+
+function getUnsynced() {
+  return records.filter(r => r.synced === false);
+}
+
+async function syncPending() {
+  const unsynced = getUnsynced();
+  if (unsynced.length === 0) return;
+  try {
+    const response = await fetch(`${API_URL}/sync/batch`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Sync-Secret': SYNC_SECRET,
+      },
+      body: JSON.stringify(unsynced),
+    });
+    if (response.ok) {
+      records = records.map(r => ({...r, synced: r.synced === false ? true : r.synced}));
+      localStorage.setItem('triage_records', JSON.stringify(records));
+    }
+  } catch (err) {}
+}
+
+window.addEventListener('online', syncPending);
+window.addEventListener('load', () => { if (navigator.onLine) syncPending(); });
+</script>
+</body>
