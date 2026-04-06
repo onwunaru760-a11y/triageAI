@@ -5,91 +5,77 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <meta name="theme-color" content="#0A1628">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
 <title>NaijaTriageAI — MNH Emergency</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg:#0A1628; --surface:#111E35; --surface2:#172340;
-  --border:rgba(255,255,255,0.08); --accent:#3B82F6; --accent2:#60A5FA;
-  --text:#F0F4FF; --muted:#8899BB;
-  --danger:#EF4444; --warning:#F59E0B; --ok:#10B981;
-  --pph:#BE185D; --neo:#C2410C;
-  --mono:'Space Mono',monospace; --sans:'DM Sans',sans-serif;
-  --r:12px; --rs:8px;
+:root{
+  --bg:#0A1628;--surface:#111E35;--surface2:#172340;
+  --border:rgba(255,255,255,0.08);--accent:#3B82F6;--accent2:#60A5FA;
+  --text:#F0F4FF;--muted:#8899BB;
+  --danger:#EF4444;--warning:#F59E0B;--ok:#10B981;
+  --pph:#BE185D;--neo:#C2410C;
+  --mono:'Space Mono',monospace;--sans:'DM Sans',sans-serif;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:72px;-webkit-font-smoothing:antialiased}
-
 /* HEADER */
-.hdr{background:var(--surface);border-bottom:1px solid var(--border);padding:13px 16px 11px;position:sticky;top:0;z-index:200}
+.hdr{background:var(--surface);border-bottom:1px solid var(--border);padding:13px 16px 11px;position:sticky;top:0;z-index:100}
 .hdr-top{display:flex;align-items:center;justify-content:space-between}
 .hdr-brand{font-family:var(--mono);font-size:13px;color:var(--accent2)}
 .hdr-badge{font-family:var(--mono);font-size:10px;padding:3px 9px;border-radius:20px;border:1px solid}
 .hdr-badge.pph{color:#F9A8D4;border-color:rgba(190,24,93,.4);background:rgba(190,24,93,.12)}
 .hdr-badge.neo{color:#FED7AA;border-color:rgba(194,65,12,.4);background:rgba(194,65,12,.12)}
-.hdr-badge.menu{color:var(--accent2);border-color:rgba(59,130,246,.3);background:rgba(59,130,246,.1)}
+.hdr-badge.def{color:var(--accent2);border-color:rgba(59,130,246,.3);background:rgba(59,130,246,.1)}
 .hdr-sub{font-size:11px;color:var(--muted);margin-top:3px}
 .sync-dot{width:7px;height:7px;border-radius:50%;display:inline-block;margin-left:6px;vertical-align:middle}
-.sync-dot.online{background:var(--ok)} .sync-dot.offline{background:var(--warning)}
-
-/* NAV */
-.bnav{position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--border);display:flex;height:62px;z-index:200}
+.sync-dot.online{background:var(--ok)}.sync-dot.offline{background:var(--warning)}
+/* BOTTOM NAV */
+.bnav{position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--border);display:flex;height:62px;z-index:100}
 .nbtn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:10px;color:var(--muted);cursor:pointer;border:none;background:none;gap:3px;font-family:var(--sans);transition:color .2s}
 .nbtn.active{color:var(--accent2)}
 .nbtn svg{width:19px;height:19px}
-
 /* PAGES */
-.page{display:none}.page.active{display:block;animation:fu .22s ease}
-@keyframes fu{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-
+.page{display:none}
+.page.active{display:block;animation:fu .2s ease}
+@keyframes fu{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 /* LAYOUT */
 .wrap{padding:16px;max-width:520px;margin:0 auto}
 .lbl{font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--border);padding-bottom:6px;margin:20px 0 10px}
 .fl{font-size:12px;color:var(--muted);display:block;margin:9px 0 4px;font-weight:500}
-.inp{width:100%;padding:11px 13px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--rs);color:var(--text);font-size:14px;font-family:var(--sans);transition:border-color .2s;appearance:none}
+.inp{width:100%;padding:11px 13px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:14px;font-family:var(--sans);appearance:none}
 .inp:focus{outline:none;border-color:var(--accent)}
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-
 /* BUTTONS */
-.btn{width:100%;color:white;padding:13px;border:none;border-radius:var(--r);font-size:15px;font-weight:600;cursor:pointer;font-family:var(--sans);transition:opacity .2s,transform .1s;margin-top:16px}
-.btn:active{opacity:.85;transform:scale(.99)}
-.btn.pph{background:var(--pph)}.btn.neo{background:var(--neo)}
-.btn.ok{background:var(--ok)}.btn.ghost{background:var(--surface2);border:1px solid var(--border);margin-top:8px}
-.brow{display:flex;gap:10px;margin-top:16px;align-items:center}
+.btn{display:block;width:100%;color:white;padding:13px;border:none;border-radius:12px;font-size:15px;font-weight:600;cursor:pointer;font-family:var(--sans);margin-top:16px;text-align:center}
+.btn:active{opacity:.85}
+.btn.pph{background:var(--pph)}
+.btn.neo{background:var(--neo)}
+.btn.ok{background:var(--ok)}
+.btn.ghost{background:var(--surface2);border:1px solid var(--border);color:var(--text)}
+.brow{display:flex;gap:10px;margin-top:16px}
 .brow .btn{flex:1;margin-top:0}
-
 /* BOXES */
-.ibox{background:rgba(59,130,246,.08);border-left:3px solid var(--accent);padding:9px 11px;border-radius:0 var(--rs) var(--rs) 0;font-size:12px;margin-bottom:8px;line-height:1.6;color:var(--accent2)}
-.wbox{background:rgba(245,158,11,.08);border-left:3px solid var(--warning);padding:9px 11px;border-radius:0 var(--rs) var(--rs) 0;font-size:12px;margin-bottom:8px;line-height:1.6;color:#FCD34D}
-.obox{background:rgba(16,185,129,.08);border-left:3px solid var(--ok);padding:9px 11px;border-radius:0 var(--rs) var(--rs) 0;font-size:12px;margin-bottom:8px;line-height:1.6;color:#6EE7B7}
-.ebox{background:rgba(239,68,68,.1);border-left:3px solid var(--danger);padding:9px 11px;border-radius:0 var(--rs) var(--rs) 0;font-size:12px;margin-bottom:8px;line-height:1.6;color:#FCA5A5}
-
+.ibox{background:rgba(59,130,246,.08);border-left:3px solid var(--accent);padding:9px 11px;border-radius:0 8px 8px 0;font-size:12px;margin-bottom:8px;line-height:1.6;color:var(--accent2)}
+.wbox{background:rgba(245,158,11,.08);border-left:3px solid var(--warning);padding:9px 11px;border-radius:0 8px 8px 0;font-size:12px;margin-bottom:8px;line-height:1.6;color:#FCD34D}
+.obox{background:rgba(16,185,129,.08);border-left:3px solid var(--ok);padding:9px 11px;border-radius:0 8px 8px 0;font-size:12px;margin-bottom:8px;line-height:1.6;color:#6EE7B7}
+.ebox{background:rgba(239,68,68,.1);border-left:3px solid var(--danger);padding:9px 11px;border-radius:0 8px 8px 0;font-size:12px;margin-bottom:8px;line-height:1.6;color:#FCA5A5}
 /* CHECKLIST */
 .cgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
-.clbl{font-size:13px;display:flex;align-items:flex-start;gap:7px;cursor:pointer;padding:9px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--rs);transition:border-color .2s;line-height:1.4}
-.clbl:has(input:checked){border-color:var(--accent);background:rgba(59,130,246,.08)}
-.clbl input{margin-top:2px;flex-shrink:0}
-input[type=checkbox]{accent-color:var(--accent);width:15px;height:15px}
-input[type=radio]{accent-color:var(--accent);width:15px;height:15px}
-
+.clbl{font-size:13px;display:flex;align-items:flex-start;gap:7px;cursor:pointer;padding:9px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;line-height:1.4}
+.clbl input{margin-top:2px;flex-shrink:0;accent-color:var(--accent);width:15px;height:15px}
 /* RESULT CARD */
-.rcard{text-align:center;padding:26px 16px;border-radius:var(--r);color:white;margin-bottom:16px;position:relative;overflow:hidden}
-.rcard::before{content:'';position:absolute;inset:0;background:rgba(255,255,255,.04)}
+.rcard{text-align:center;padding:26px 16px;border-radius:12px;color:white;margin-bottom:16px}
 .rcat{font-size:52px;font-weight:700;line-height:1;font-family:var(--mono)}
-.rlbl{font-size:16px;font-weight:600;margin-top:5px;letter-spacing:.5px}
+.rlbl{font-size:16px;font-weight:600;margin-top:5px}
 .rsub{font-size:12px;opacity:.8;margin-top:4px}
-
 /* PROB BARS */
 .prow{display:flex;align-items:center;gap:8px;margin-bottom:7px}
 .plbl{font-size:11px;width:90px;flex-shrink:0;color:var(--muted);font-family:var(--mono)}
 .pbwrap{flex:1;background:var(--surface2);border-radius:3px;height:8px}
-.pbar{border-radius:3px;height:8px;transition:width .6s ease}
+.pbar{border-radius:3px;height:8px}
 .ppct{font-size:11px;width:40px;text-align:right;font-family:var(--mono);color:var(--muted)}
-
 /* MENU CARDS */
-.mcard{border-radius:var(--r);padding:20px 16px;margin-bottom:12px;cursor:pointer;transition:transform .15s,opacity .15s;border:1px solid var(--border);display:flex;align-items:center;gap:16px}
-.mcard:active{transform:scale(.98);opacity:.85}
+.mcard{border-radius:12px;padding:20px 16px;margin-bottom:12px;cursor:pointer;border:1px solid var(--border);display:flex;align-items:center;gap:16px}
 .mcard.pph{background:linear-gradient(135deg,rgba(190,24,93,.2),rgba(190,24,93,.08));border-color:rgba(190,24,93,.3)}
 .mcard.neo{background:linear-gradient(135deg,rgba(194,65,12,.2),rgba(194,65,12,.08));border-color:rgba(194,65,12,.3)}
 .mico{font-size:36px;flex-shrink:0}
@@ -98,99 +84,75 @@ input[type=radio]{accent-color:var(--accent);width:15px;height:15px}
 .mpill{display:inline-block;font-family:var(--mono);font-size:10px;padding:2px 8px;border-radius:20px;margin-top:6px}
 .mpill.pph{background:rgba(190,24,93,.2);color:#F9A8D4}
 .mpill.neo{background:rgba(194,65,12,.2);color:#FED7AA}
-
-/* EMERGENCY MODE */
-.em-screen{position:fixed;inset:0;z-index:500;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center}
-.em-screen.hidden{display:none}
-.em-title{font-size:13px;font-family:var(--mono);letter-spacing:2px;margin-bottom:16px;opacity:.8}
-.em-question{font-size:22px;font-weight:700;line-height:1.3;margin-bottom:28px;max-width:320px}
-.em-btns{display:flex;gap:12px;width:100%;max-width:360px}
-.em-btn{flex:1;padding:22px 10px;border:none;border-radius:var(--r);font-size:18px;font-weight:700;cursor:pointer;font-family:var(--sans)}
+/* EMERGENCY OVERLAY */
+.emscreen{position:fixed;inset:0;z-index:500;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center;overflow-y:auto}
+.emscreen.hidden{display:none}
+.em-q{font-size:20px;font-weight:700;line-height:1.4;margin-bottom:24px;max-width:320px;color:white}
+.em-btns{display:flex;gap:12px;width:100%;max-width:360px;margin-bottom:16px}
+.em-btn{flex:1;padding:22px 10px;border:none;border-radius:12px;font-size:18px;font-weight:700;cursor:pointer;font-family:var(--sans)}
 .em-btn.yes{background:#B91C1C;color:white}
-.em-btn.no{background:var(--surface2);color:var(--text);border:1px solid var(--border)}
-.em-protocol{width:100%;max-width:400px;text-align:left}
-.em-action{padding:14px 16px;border-radius:var(--rs);margin-bottom:8px;font-size:15px;font-weight:600;line-height:1.4}
-.em-action.crit{background:#B91C1C;color:white;font-size:17px}
-.em-action.high{background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.4);color:#FCA5A5}
-.em-action.norm{background:var(--surface2);border:1px solid var(--border);color:var(--text);font-weight:400;font-size:14px}
-.em-close{margin-top:16px;padding:12px 28px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--rs);color:var(--muted);font-size:13px;cursor:pointer;font-family:var(--sans)}
-
+.em-btn.no{background:#1E293B;color:white;border:1px solid rgba(255,255,255,.2)}
+.em-act{padding:12px 14px;border-radius:8px;margin-bottom:7px;font-size:14px;font-weight:500;line-height:1.4;text-align:left;width:100%;max-width:400px}
+.em-act.crit{background:#B91C1C;color:white;font-size:16px;font-weight:700}
+.em-act.high{background:rgba(239,68,68,.2);border:1px solid rgba(239,68,68,.4);color:#FCA5A5}
+.em-act.norm{background:#1E293B;border:1px solid rgba(255,255,255,.1);color:#E2E8F0}
+.em-close{margin-top:12px;padding:11px 24px;background:#1E293B;border:1px solid rgba(255,255,255,.15);border-radius:8px;color:#94A3B8;font-size:13px;cursor:pointer;font-family:var(--sans)}
+.em-link{margin-top:8px;padding:11px 24px;background:rgba(59,130,246,.2);border:1px solid rgba(59,130,246,.4);border-radius:8px;color:var(--accent2);font-size:13px;cursor:pointer;font-family:var(--sans);font-weight:600}
 /* TIMER */
-.timer-wrap{text-align:center;padding:20px 0}
-.timer-ring{width:160px;height:160px;margin:0 auto 16px}
-.timer-ring svg{transform:rotate(-90deg)}
-.timer-ring circle.bg{fill:none;stroke:var(--surface2);stroke-width:8}
-.timer-ring circle.prog{fill:none;stroke-width:8;stroke-linecap:round;transition:stroke-dashoffset .5s linear,stroke .5s}
-.timer-num{font-family:var(--mono);font-size:48px;font-weight:700;color:var(--text)}
-.timer-label{font-size:13px;color:var(--muted);margin-top:4px}
-.timer-phase{font-size:16px;font-weight:600;margin-bottom:16px;min-height:24px}
-.timer-instruction{font-size:14px;color:var(--muted);line-height:1.5;min-height:44px;margin-bottom:16px;padding:0 8px;text-align:center}
-.timer-btn{padding:14px 36px;border:none;border-radius:var(--r);font-size:15px;font-weight:600;cursor:pointer;font-family:var(--sans);color:white}
+.timer-wrap{text-align:center;padding:10px 0;width:100%;max-width:360px}
+.timer-ring{width:150px;height:150px;position:relative;margin:0 auto 14px}
+.timer-ring svg{transform:rotate(-90deg);width:150px;height:150px}
+.timer-num-wrap{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center}
+.timer-num{font-family:var(--mono);font-size:44px;font-weight:700;color:white}
+.timer-phase{font-size:15px;font-weight:700;margin-bottom:10px;color:white;min-height:22px}
+.timer-inst{font-size:13px;color:#94A3B8;line-height:1.5;margin-bottom:14px;min-height:40px}
+.timer-btn{padding:13px 32px;border:none;border-radius:12px;font-size:15px;font-weight:600;cursor:pointer;font-family:var(--sans);color:white}
 .timer-btn.start{background:var(--neo)}
 .timer-btn.stop{background:var(--danger)}
 .timer-btn.next{background:var(--ok)}
-
 /* APGAR */
-.apgar-table{width:100%;border-collapse:collapse;margin-bottom:12px}
-.apgar-table th{background:var(--surface2);color:var(--muted);padding:7px 6px;font-family:var(--mono);font-size:9px;letter-spacing:1px;border-bottom:1px solid var(--border);text-align:center}
-.apgar-table td{padding:8px 6px;border-bottom:1px solid var(--border);font-size:12px;vertical-align:middle}
-.apgar-table td:first-child{font-weight:600;font-size:11px;color:var(--muted)}
+.apgar-table{width:100%;border-collapse:collapse;margin-bottom:10px}
+.apgar-table th{background:var(--surface2);color:var(--muted);padding:7px 4px;font-family:var(--mono);font-size:9px;letter-spacing:1px;border-bottom:1px solid var(--border);text-align:center}
+.apgar-table td{padding:8px 4px;border-bottom:1px solid var(--border);font-size:11px;vertical-align:middle}
+.apgar-table td:first-child{font-weight:600;color:var(--muted);width:100px}
 .ascore{text-align:center}
-.ascore label{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:var(--rs);border:1px solid var(--border);cursor:pointer;font-size:13px;font-weight:600;margin:2px;transition:all .2s;background:var(--surface2)}
+.ascore label{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:6px;border:1px solid var(--border);cursor:pointer;font-size:13px;font-weight:600;background:var(--surface2);color:var(--muted)}
 .ascore input[type=radio]{display:none}
-.ascore input[type=radio]:checked+span{background:var(--accent);border-color:var(--accent);color:white}
 .ascore label:has(input:checked){background:var(--accent);border-color:var(--accent);color:white}
-.apgar-total{text-align:center;padding:14px;border-radius:var(--r);margin-bottom:12px}
-.apgar-num{font-size:48px;font-weight:700;font-family:var(--mono)}
-.apgar-interp{font-size:14px;font-weight:600;margin-top:4px}
-
+.apgar-total{text-align:center;padding:14px;border-radius:12px;margin-bottom:12px}
+.apgar-score{font-size:44px;font-weight:700;font-family:var(--mono)}
 /* BLOOD LOSS */
-.bl-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px}
-.bl-card{border:2px solid var(--border);border-radius:var(--r);padding:12px 8px;text-align:center;cursor:pointer;transition:all .2s;background:var(--surface2)}
+.bl-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.bl-card{border:2px solid var(--border);border-radius:12px;padding:10px 6px;text-align:center;cursor:pointer;background:var(--surface2)}
 .bl-card.selected{border-color:var(--pph);background:rgba(190,24,93,.12)}
-.bl-pad{margin:0 auto 8px;border-radius:6px;background:rgba(255,255,255,.08)}
-.bl-vol{font-family:var(--mono);font-size:13px;font-weight:700;margin-bottom:3px}
-.bl-desc{font-size:10px;color:var(--muted);line-height:1.3}
-
+.bl-pad{margin:0 auto 6px;border-radius:4px}
+.bl-vol{font-family:var(--mono);font-size:11px;font-weight:700;margin-bottom:2px}
+.bl-desc{font-size:9px;color:var(--muted);line-height:1.3}
 /* REFERRAL */
-.ref-q{margin-bottom:16px}
-.ref-q-title{font-size:14px;font-weight:600;margin-bottom:8px}
-.ref-opts{display:flex;flex-direction:column;gap:6px}
-.ref-opt{padding:10px 12px;border-radius:var(--rs);border:1px solid var(--border);background:var(--surface2);cursor:pointer;font-size:13px;transition:all .2s;display:flex;align-items:center;gap:8px}
-.ref-opt.selected{border-color:var(--accent);background:rgba(59,130,246,.08)}
-.ref-opt input[type=radio]{display:none}
-.ref-decision{border-radius:var(--r);padding:16px;margin-bottom:12px;text-align:center}
-.ref-decision .ref-icon{font-size:32px;margin-bottom:8px}
-.ref-decision .ref-msg{font-size:15px;font-weight:600}
-.ref-decision .ref-sub{font-size:12px;margin-top:4px;opacity:.8}
-
+.ref-opt{padding:10px 12px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);cursor:pointer;font-size:13px;display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.ref-opt input[type=radio]{accent-color:var(--accent);width:15px;height:15px}
 /* DRUG REF */
-.drug-item{border:1px solid var(--border);border-radius:var(--rs);margin-bottom:8px;overflow:hidden}
-.drug-header{padding:10px 13px;background:var(--surface2);cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:600}
-.drug-header .drug-name{color:var(--text)}
-.drug-header .drug-toggle{color:var(--muted);font-size:18px;font-family:var(--mono)}
+.drug-item{border:1px solid var(--border);border-radius:8px;margin-bottom:8px;overflow:hidden}
+.drug-hdr{padding:10px 13px;background:var(--surface2);cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:600;color:var(--text)}
 .drug-body{display:none;padding:12px 13px;font-size:12px;line-height:1.7;color:var(--muted);border-top:1px solid var(--border)}
 .drug-body.open{display:block}
-.drug-body strong{color:var(--text)}
 .drug-row{display:flex;gap:8px;margin-bottom:4px}
-.drug-key{color:var(--accent2);font-family:var(--mono);font-size:10px;letter-spacing:1px;width:80px;flex-shrink:0;padding-top:1px}
-
+.drug-key{color:var(--accent2);font-family:var(--mono);font-size:10px;width:70px;flex-shrink:0}
 /* ANALYTICS */
 .mrow{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:14px}
-.mcard2{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:14px;text-align:center}
+.mcard2{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center}
 .mnum{font-size:26px;font-weight:700;font-family:var(--mono)}
-.mnum.pph{color:#F9A8D4}.mnum.neo{color:#FED7AA}.mnum.ok{color:#6EE7B7}
+.mnum.pph{color:#F9A8D4}.mnum.neo{color:#FED7AA}
 .mlbl{font-size:11px;color:var(--muted);margin-top:3px}
-
-.disc{background:var(--surface2);border:1px solid var(--border);padding:10px 12px;border-radius:var(--rs);font-size:11px;color:var(--muted);line-height:1.6;margin-top:12px}
+.disc{background:var(--surface2);border:1px solid var(--border);padding:10px 12px;border-radius:8px;font-size:11px;color:var(--muted);line-height:1.6;margin-top:12px}
 .disc strong{color:var(--warning)}
 </style>
 </head>
 <body>
 
-<!-- EMERGENCY OVERLAY -->
-<div class="em-screen hidden" id="emScreen" style="background:#0D0D0D">
-  <div id="emContent"></div>
+<!-- EMERGENCY OVERLAY (hidden by default) -->
+<div class="emscreen hidden" id="emScreen" style="background:#0A0F1A">
+  <div id="emContent" style="width:100%;max-width:420px;display:flex;flex-direction:column;align-items:center"></div>
 </div>
 
 <!-- HEADER -->
@@ -198,21 +160,22 @@ input[type=radio]{accent-color:var(--accent);width:15px;height:15px}
   <div class="hdr-top">
     <div class="hdr-brand">NaijaTriageAI · MNH</div>
     <div style="display:flex;align-items:center;gap:8px">
-      <span class="sync-dot offline" id="syncDot" title="Sync status"></span>
-      <div class="hdr-badge menu" id="hdrBadge">MNH</div>
+      <span class="sync-dot offline" id="syncDot"></span>
+      <div class="hdr-badge def" id="hdrBadge">MNH</div>
     </div>
   </div>
   <div class="hdr-sub">Maternal &amp; Neonatal Emergency · WHO BEmONC · Offline-First</div>
 </div>
 
+<!-- ALL PAGES INSIDE .wrap -->
 <div class="wrap">
 
-  <!-- ══ MENU ══ -->
+  <!-- PAGE: MENU -->
   <div class="page active" id="pageMenu">
     <div class="lbl">Select Emergency</div>
-    <div class="ibox">Both modules follow WHO BEmONC protocols calibrated to Nigerian PHC. Tap <b>Emergency Mode</b> during active crisis — no typing needed. Use full assessment after stabilisation.</div>
+    <div class="ibox">Tap a card to enter Emergency Mode (no typing). Use the nav bar for full assessment after stabilisation.</div>
 
-    <div class="mcard pph" onclick="startEmergency('pph')">
+    <div class="mcard pph" onclick="openEmergency('pph')">
       <div class="mico">🩸</div>
       <div>
         <div class="mtitle">Postpartum Haemorrhage</div>
@@ -221,65 +184,64 @@ input[type=radio]{accent-color:var(--accent);width:15px;height:15px}
       </div>
     </div>
 
-    <div class="mcard neo" onclick="startEmergency('neo')">
+    <div class="mcard neo" onclick="openEmergency('neo')">
       <div class="mico">👶</div>
       <div>
         <div class="mtitle">Neonatal Asphyxia</div>
-        <div class="msub">At birth — 30-second rule timer included</div>
+        <div class="msub">At birth — 30-second timer included</div>
         <div class="mpill neo">Leading cause of neonatal death</div>
       </div>
     </div>
 
-    <div style="margin-top:8px">
-      <a class="btn ghost" href="index.html" style="display:block;text-align:center;text-decoration:none">&larr; Back to Chest Pain</a>
-      <button class="btn ghost" onclick="nav('pph')">PPH Full Assessment &rarr;</button>
-      <button class="btn ghost" onclick="nav('neo')">Neonatal Full Assessment &rarr;</button>
-    </div>
+    <a class="btn ghost" href="index.html" style="display:block;text-align:center;text-decoration:none">&larr; Back to Chest Pain</a>
+    <button class="btn ghost" onclick="goTo('pagePPH','nPPH','PPH','pph')">PPH Full Assessment (after stabilisation) →</button>
+    <button class="btn ghost" onclick="goTo('pageNeo','nNeo','NEONATE','neo')">Neonatal Full Assessment (after stabilisation) →</button>
   </div>
 
-  <!-- ══ PPH FULL FORM ══ -->
+  <!-- PAGE: PPH FORM -->
   <div class="page" id="pagePPH">
-    <div class="ebox">Active emergency? Tap <b>Emergency Mode</b> first. Enter data after stabilisation.</div>
-    <button class="btn pph" style="margin-top:0" onclick="startEmergency('pph')">⚡ Emergency Mode (No Typing)</button>
+    <div class="ebox">Active emergency? Tap Emergency Mode — no typing needed. Use this form after stabilisation.</div>
+    <button class="btn pph" onclick="openEmergency('pph')">⚡ Emergency Mode</button>
 
     <div class="lbl">Vitals</div>
     <div class="g2">
       <div><label class="fl">Systolic BP (mmHg)</label><input type="number" class="inp" id="p_sbp" value="100"></div>
       <div><label class="fl">Pulse (bpm)</label><input type="number" class="inp" id="p_pulse" value="90"></div>
     </div>
-    <label class="fl">SpO2 (%)</label><input type="number" class="inp" id="p_spo2" value="97">
+    <label class="fl">SpO2 (%)</label>
+    <input type="number" class="inp" id="p_spo2" value="97">
 
     <div class="lbl">Estimated Blood Loss</div>
-    <div class="bl-grid" id="bloodLossGrid">
-      <div class="bl-card" onclick="selectBL(this,'<250ml')" data-vol="<250ml">
-        <div class="bl-pad" style="width:50px;height:30px;background:rgba(190,24,93,.15);border:1px solid rgba(190,24,93,.3)"></div>
+    <div class="bl-grid" id="blGrid">
+      <div class="bl-card" onclick="pickBL(this,'&lt;250ml')">
+        <div class="bl-pad" style="width:44px;height:28px;background:rgba(190,24,93,.2);border:1px solid rgba(190,24,93,.4)"></div>
         <div class="bl-vol">&lt;250 ml</div>
-        <div class="bl-desc">Light staining<br>pad not soaked</div>
+        <div class="bl-desc">Light staining</div>
       </div>
-      <div class="bl-card" onclick="selectBL(this,'250-500ml')" data-vol="250-500ml">
-        <div class="bl-pad" style="width:50px;height:38px;background:rgba(190,24,93,.3);border:1px solid rgba(190,24,93,.5)"></div>
+      <div class="bl-card" onclick="pickBL(this,'250-500ml')">
+        <div class="bl-pad" style="width:44px;height:36px;background:rgba(190,24,93,.35);border:1px solid rgba(190,24,93,.6)"></div>
         <div class="bl-vol">250–500 ml</div>
-        <div class="bl-desc">1 pad soaked<br>within 1 hour</div>
+        <div class="bl-desc">1 pad soaked</div>
       </div>
-      <div class="bl-card" onclick="selectBL(this,'500-1000ml')" data-vol="500-1000ml">
-        <div class="bl-pad" style="width:50px;height:46px;background:rgba(190,24,93,.5);border:1px solid rgba(190,24,93,.7)"></div>
+      <div class="bl-card" onclick="pickBL(this,'500-1000ml')">
+        <div class="bl-pad" style="width:44px;height:44px;background:rgba(190,24,93,.55);border:1px solid #BE185D"></div>
         <div class="bl-vol">500–1000 ml</div>
-        <div class="bl-desc">2 pads soaked<br>&lt;15 minutes</div>
+        <div class="bl-desc">2 pads &lt;15 min</div>
       </div>
-      <div class="bl-card" onclick="selectBL(this,'>1000ml')" data-vol=">1000ml">
-        <div class="bl-pad" style="width:50px;height:54px;background:rgba(190,24,93,.7);border:1px solid #BE185D"></div>
+      <div class="bl-card" onclick="pickBL(this,'&gt;1000ml')">
+        <div class="bl-pad" style="width:44px;height:50px;background:rgba(190,24,93,.75);border:2px solid #BE185D"></div>
         <div class="bl-vol">&gt;1000 ml</div>
-        <div class="bl-desc">Sheet/floor<br>soaked — shock</div>
+        <div class="bl-desc">Sheet soaked</div>
       </div>
-      <div class="bl-card" onclick="selectBL(this,'>1500ml')" data-vol=">1500ml">
-        <div class="bl-pad" style="width:50px;height:60px;background:#BE185D"></div>
+      <div class="bl-card" onclick="pickBL(this,'&gt;1500ml')">
+        <div class="bl-pad" style="width:44px;height:56px;background:#BE185D"></div>
         <div class="bl-vol">&gt;1500 ml</div>
-        <div class="bl-desc">Massive loss<br>haemorrhagic shock</div>
+        <div class="bl-desc">Massive / shock</div>
       </div>
-      <div class="bl-card" onclick="selectBL(this,'Unknown')" data-vol="Unknown">
-        <div class="bl-pad" style="width:50px;height:36px;background:var(--surface);border:1px solid var(--border)"></div>
+      <div class="bl-card" onclick="pickBL(this,'Unknown')">
+        <div class="bl-pad" style="width:44px;height:34px;background:var(--surface);border:1px solid var(--border)"></div>
         <div class="bl-vol">Unknown</div>
-        <div class="bl-desc">Cannot<br>estimate</div>
+        <div class="bl-desc">Cannot estimate</div>
       </div>
     </div>
 
@@ -289,9 +251,9 @@ input[type=radio]{accent-color:var(--accent);width:15px;height:15px}
       <label class="clbl"><input type="checkbox" id="p_clots"> Passing clots</label>
       <label class="clbl"><input type="checkbox" id="p_ongoing"> Bleeding ongoing</label>
       <label class="clbl"><input type="checkbox" id="p_uterus"> Uterus not firm</label>
-      <label class="clbl"><input type="checkbox" id="p_tear"> Visible perineal tear</label>
+      <label class="clbl"><input type="checkbox" id="p_tear"> Perineal tear visible</label>
       <label class="clbl"><input type="checkbox" id="p_placenta"> Retained placenta</label>
-      <label class="clbl"><input type="checkbox" id="p_pallor"> Pallor (lips/conjunctiva)</label>
+      <label class="clbl"><input type="checkbox" id="p_pallor"> Pallor (lips / conjunctiva)</label>
       <label class="clbl"><input type="checkbox" id="p_conscious"> Altered consciousness</label>
     </div>
 
@@ -303,57 +265,49 @@ input[type=radio]{accent-color:var(--accent);width:15px;height:15px}
       <label class="clbl"><input type="checkbox" id="p_anaemia"> Known severe anaemia</label>
     </div>
 
-    <div class="lbl">Referral Assessment</div>
-    <div id="pphReferral">
-      <div class="ref-q">
-        <div class="ref-q-title">Distance to referral centre</div>
-        <div class="ref-opts">
-          <label class="ref-opt" onclick="this.classList.add('selected');this.closest('.ref-opts').querySelectorAll('.ref-opt').forEach(o=>o!==this&&o.classList.remove('selected'))"><input type="radio" name="ref_dist" value="near"> <span>Less than 30 minutes</span></label>
-          <label class="ref-opt" onclick="this.classList.add('selected');this.closest('.ref-opts').querySelectorAll('.ref-opt').forEach(o=>o!==this&&o.classList.remove('selected'))"><input type="radio" name="ref_dist" value="mid"> <span>30 to 60 minutes</span></label>
-          <label class="ref-opt" onclick="this.classList.add('selected');this.closest('.ref-opts').querySelectorAll('.ref-opt').forEach(o=>o!==this&&o.classList.remove('selected'))"><input type="radio" name="ref_dist" value="far"> <span>More than 60 minutes</span></label>
-        </div>
-      </div>
-      <div class="ref-q">
-        <div class="ref-q-title">Transport available now?</div>
-        <div class="ref-opts">
-          <label class="ref-opt" onclick="this.classList.add('selected');this.closest('.ref-opts').querySelectorAll('.ref-opt').forEach(o=>o!==this&&o.classList.remove('selected'))"><input type="radio" name="ref_transport" value="yes"> <span>Yes — ambulance or vehicle ready</span></label>
-          <label class="ref-opt" onclick="this.classList.add('selected');this.closest('.ref-opts').querySelectorAll('.ref-opt').forEach(o=>o!==this&&o.classList.remove('selected'))"><input type="radio" name="ref_transport" value="no"> <span>No — will need to arrange</span></label>
-        </div>
-      </div>
+    <div class="lbl">Referral Context</div>
+    <div>
+      <div style="font-size:13px;font-weight:600;margin-bottom:8px">Distance to referral centre</div>
+      <label class="ref-opt"><input type="radio" name="ref_dist" value="near"> Less than 30 minutes</label>
+      <label class="ref-opt"><input type="radio" name="ref_dist" value="mid"> 30 to 60 minutes</label>
+      <label class="ref-opt"><input type="radio" name="ref_dist" value="far"> More than 60 minutes</label>
+      <div style="font-size:13px;font-weight:600;margin:12px 0 8px">Transport available now?</div>
+      <label class="ref-opt"><input type="radio" name="ref_transport" value="yes"> Yes — vehicle or ambulance ready</label>
+      <label class="ref-opt"><input type="radio" name="ref_transport" value="no"> No — will need to arrange</label>
     </div>
 
     <div class="lbl">PPH Drug Reference</div>
     <div id="pphDrugs"></div>
 
     <div class="brow">
-      <button class="btn ghost" style="flex:0 0 auto;width:80px;margin-top:0" onclick="nav('menu')">← Back</button>
-      <button class="btn pph" style="margin-top:0" onclick="calcPPH()">Calculate &amp; Save</button>
+      <button class="btn ghost" style="flex:0 0 80px" onclick="goTo('pageMenu','nMenu','MNH','def')">← Back</button>
+      <button class="btn pph" onclick="calcPPH()">Calculate &amp; Save</button>
     </div>
   </div>
 
-  <!-- ══ PPH RESULTS ══ -->
+  <!-- PAGE: PPH RESULTS -->
   <div class="page" id="pagePPHResults">
     <div class="rcard" id="pphCard">
       <div class="rcat" id="pphCat">—</div>
       <div class="rlbl">PPH Risk Category</div>
       <div class="rsub" id="pphSub">—</div>
     </div>
-    <div id="pphRefDecision"></div>
+    <div id="pphRefBox"></div>
     <div class="lbl">Probability Distribution</div>
     <div id="pphBars"></div>
     <div class="lbl">Immediate Actions</div>
     <div id="pphActions"></div>
-    <div class="disc"><strong>Clinical Responsibility:</strong> Decision support only. Not validated on real outcomes. Final decision rests with the attending clinician.</div>
-    <button class="btn pph" onclick="resetPPH()">New PPH Assessment</button>
-    <button class="btn ghost" onclick="nav('menu')">Back to MNH Menu</button>
+    <div class="disc"><strong>Clinical Responsibility:</strong> Decision support only. Not validated on real patient outcomes. Final decision rests with the attending clinician.</div>
+    <button class="btn pph" onclick="goTo('pagePPH','nPPH','PPH','pph')">New PPH Assessment</button>
+    <button class="btn ghost" onclick="goTo('pageMenu','nMenu','MNH','def')">Back to MNH Menu</button>
   </div>
 
-  <!-- ══ NEONATE FORM ══ -->
+  <!-- PAGE: NEONATE FORM -->
   <div class="page" id="pageNeo">
-    <div class="ebox">Active emergency? Use <b>Emergency Mode</b> with timer. Enter data after 5-minute APGAR.</div>
-    <button class="btn neo" style="margin-top:0" onclick="startEmergency('neo')">⚡ Emergency Mode + Timer</button>
+    <div class="ebox">Active emergency? Tap Emergency Mode with timer first. Use this form for documentation after 5-min APGAR.</div>
+    <button class="btn neo" onclick="openEmergency('neo')">⚡ Emergency Mode + Timer</button>
 
-    <div class="lbl">Neonatal Assessment</div>
+    <div class="lbl">Neonatal Assessment at Birth</div>
     <div class="cgrid">
       <label class="clbl"><input type="checkbox" id="n_notbreathing"> Not breathing</label>
       <label class="clbl"><input type="checkbox" id="n_nocry"> No cry at birth</label>
@@ -370,7 +324,7 @@ input[type=radio]{accent-color:var(--accent);width:15px;height:15px}
       <label class="clbl"><input type="checkbox" id="n_distress"> Fetal distress (abnl FHR)</label>
       <label class="clbl"><input type="checkbox" id="n_cord"> Cord prolapse</label>
       <label class="clbl"><input type="checkbox" id="n_meconium"> Thick meconium liquor</label>
-      <label class="clbl"><input type="checkbox" id="n_preterm"> Preterm (&lt;34 weeks)</label>
+      <label class="clbl"><input type="checkbox" id="n_preterm"> Preterm (under 34 weeks)</label>
     </div>
 
     <div class="lbl">APGAR Score</div>
@@ -380,12 +334,12 @@ input[type=radio]{accent-color:var(--accent);width:15px;height:15px}
     <div id="neoDrugs"></div>
 
     <div class="brow">
-      <button class="btn ghost" style="flex:0 0 auto;width:80px;margin-top:0" onclick="nav('menu')">← Back</button>
-      <button class="btn neo" style="margin-top:0" onclick="calcNeo()">Calculate &amp; Save</button>
+      <button class="btn ghost" style="flex:0 0 80px" onclick="goTo('pageMenu','nMenu','MNH','def')">← Back</button>
+      <button class="btn neo" onclick="calcNeo()">Calculate &amp; Save</button>
     </div>
   </div>
 
-  <!-- ══ NEONATE RESULTS ══ -->
+  <!-- PAGE: NEONATE RESULTS -->
   <div class="page" id="pageNeoResults">
     <div class="rcard" id="neoCard">
       <div class="rcat" id="neoCat">—</div>
@@ -398,12 +352,12 @@ input[type=radio]{accent-color:var(--accent);width:15px;height:15px}
     <div id="neoBars"></div>
     <div class="lbl">Immediate Actions</div>
     <div id="neoActions"></div>
-    <div class="disc"><strong>Clinical Responsibility:</strong> Decision support only. Not validated on real outcomes. Final decision rests with the attending clinician.</div>
-    <button class="btn neo" onclick="resetNeo()">New Neonatal Assessment</button>
-    <button class="btn ghost" onclick="nav('menu')">Back to MNH Menu</button>
+    <div class="disc"><strong>Clinical Responsibility:</strong> Decision support only. Not validated on real patient outcomes. Final decision rests with the attending clinician.</div>
+    <button class="btn neo" onclick="goTo('pageNeo','nNeo','NEONATE','neo')">New Neonatal Assessment</button>
+    <button class="btn ghost" onclick="goTo('pageMenu','nMenu','MNH','def')">Back to MNH Menu</button>
   </div>
 
-  <!-- ══ ANALYTICS ══ -->
+  <!-- PAGE: ANALYTICS -->
   <div class="page" id="pageAnalytics">
     <div class="lbl">MNH Analytics</div>
     <div class="mrow">
@@ -412,42 +366,66 @@ input[type=radio]{accent-color:var(--accent);width:15px;height:15px}
       <div class="mcard2"><div class="mnum neo" id="sNeo">0</div><div class="mlbl">Neonatal Total</div></div>
       <div class="mcard2"><div class="mnum neo" id="sNeoH">0</div><div class="mlbl">Neonatal High Risk</div></div>
     </div>
-    <div id="syncStatus"></div>
+    <div id="syncMsg"></div>
     <div id="analyticsRecs"></div>
   </div>
 
-</div><!-- /wrap -->
+</div><!-- end .wrap -->
 
 <!-- BOTTOM NAV -->
 <nav class="bnav">
-  <button class="nbtn active" id="nMenu" onclick="nav('menu')">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Menu
+  <button class="nbtn active" id="nMenu" onclick="goTo('pageMenu','nMenu','MNH','def')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    Menu
   </button>
-  <button class="nbtn" id="nPPH" onclick="nav('pph')">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>PPH
+  <button class="nbtn" id="nPPH" onclick="goTo('pagePPH','nPPH','PPH','pph')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+    PPH
   </button>
-  <button class="nbtn" id="nNeo" onclick="nav('neo')">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M6 20v-2a6 6 0 0112 0v2"/></svg>Neonate
+  <button class="nbtn" id="nNeo" onclick="goTo('pageNeo','nNeo','NEONATE','neo')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M6 20v-2a6 6 0 0112 0v2"/></svg>
+    Neonate
   </button>
-  <button class="nbtn" id="nAnalytics" onclick="nav('analytics')">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Analytics
+  <button class="nbtn" id="nAnalytics" onclick="goTo('pageAnalytics','nAnalytics','ANALYTICS','def')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+    Analytics
   </button>
 </nav>
 
 <script>
-// ══════════════════════════════════════════════════════════
-// STORAGE + SYNC
-// ══════════════════════════════════════════════════════════
-const DB_KEY = 'mnh_records_v2';
-let records = JSON.parse(localStorage.getItem(DB_KEY) || '[]');
-let selectedBL = 'Unknown';
+// ══════════════════════════════════════════════
+// NAVIGATION — single function, used everywhere
+// ══════════════════════════════════════════════
+function goTo(pageId, btnId, badgeText, badgeClass) {
+  // Hide all pages
+  document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('active'); });
+  // Show target page
+  var pg = document.getElementById(pageId);
+  if (pg) pg.classList.add('active');
+  // Update nav buttons
+  document.querySelectorAll('.nbtn').forEach(function(b){ b.classList.remove('active'); });
+  var nb = document.getElementById(btnId);
+  if (nb) nb.classList.add('active');
+  // Update header badge
+  var badge = document.getElementById('hdrBadge');
+  badge.textContent = badgeText;
+  badge.className = 'hdr-badge ' + badgeClass;
+  // Analytics special case
+  if (pageId === 'pageAnalytics') renderAnalytics();
+  // Scroll to top
+  window.scrollTo(0, 0);
+}
 
-// API_URL: replace with your Render/Railway endpoint when deployed
-// Leave as null for fully offline mode — nothing breaks
-const API_URL = null; // e.g. 'https://your-app.onrender.com'
+// ══════════════════════════════════════════════
+// STORAGE + SYNC
+// ══════════════════════════════════════════════
+var DB_KEY = 'mnh_records_v2';
+var records = JSON.parse(localStorage.getItem(DB_KEY) || '[]');
+var selectedBL = 'Unknown';
+var API_URL = null; // Set to your Render URL when ready e.g. 'https://your-app.onrender.com'
 
 function saveRecord(rec) {
-  rec.id = Date.now() + '_' + Math.random().toString(36).slice(2,7);
+  rec.id = Date.now() + '_' + Math.random().toString(36).slice(2,6);
   rec.synced = false;
   rec.timestamp = new Date().toISOString();
   records.unshift(rec);
@@ -456,632 +434,396 @@ function saveRecord(rec) {
   if (navigator.onLine && API_URL) syncRecords();
 }
 
-async function syncRecords() {
+function syncRecords() {
   if (!API_URL) return;
-  const unsynced = records.filter(r => !r.synced);
+  var unsynced = records.filter(function(r){ return !r.synced; });
   if (!unsynced.length) return;
-  try {
-    for (const rec of unsynced) {
-      const res = await fetch(API_URL + '/api/mnh', {
-        method: 'POST',
-        headers: {'Content-Type':'application/json'},
-        body: JSON.stringify(rec)
-      });
+  unsynced.forEach(function(rec) {
+    fetch(API_URL + '/api/mnh', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify(rec)
+    }).then(function(res) {
       if (res.ok) {
-        const idx = records.findIndex(r => r.id === rec.id);
+        var idx = records.findIndex(function(r){ return r.id === rec.id; });
         if (idx > -1) records[idx].synced = true;
+        localStorage.setItem(DB_KEY, JSON.stringify(records));
       }
-    }
-    localStorage.setItem(DB_KEY, JSON.stringify(records));
-  } catch(e) { console.log('Sync failed — will retry when online'); }
+    }).catch(function(){});
+  });
 }
 
-window.addEventListener('online', () => {
+window.addEventListener('online', function() {
   document.getElementById('syncDot').className = 'sync-dot online';
-  if (API_URL) syncRecords();
+  syncRecords();
 });
-window.addEventListener('offline', () => {
+window.addEventListener('offline', function() {
   document.getElementById('syncDot').className = 'sync-dot offline';
 });
 document.getElementById('syncDot').className = navigator.onLine ? 'sync-dot online' : 'sync-dot offline';
 
-// ══════════════════════════════════════════════════════════
-// BAYESIAN — PPH (exact port of mnh_model.py)
-// ══════════════════════════════════════════════════════════
-const PPH_P = [0.15, 0.28, 0.57];
-const PPH_LK = {
+// ══════════════════════════════════════════════
+// BAYESIAN — PPH
+// ══════════════════════════════════════════════
+var PPH_P = [0.15, 0.28, 0.57];
+var PPH_LK = {
   shock_bp:[.90,.30,.05], tachycardia:[.78,.48,.12], severe_tachy:[.88,.32,.04],
   low_spo2:[.72,.38,.08], soaked_2_pads:[.82,.45,.10], passing_clots:[.70,.48,.15],
   bleeding_ongoing:[.85,.50,.12], uterus_not_firm:[.75,.55,.20],
   perineal_tear:[.42,.48,.28], retained_placenta:[.78,.35,.08],
   pallor:[.65,.45,.20], altered_conscious:[.90,.20,.02],
   grand_multipara:[.38,.42,.28], prolonged_labour:[.42,.45,.22],
-  prev_pph:[.48,.42,.18], anaemia_known:[.45,.48,.30],
+  prev_pph:[.48,.42,.18], anaemia_known:[.45,.48,.30]
 };
 
 function bayesPPH(ev) {
-  let p = [...PPH_P];
-  for (const [f, present] of Object.entries(ev)) {
-    const lk = PPH_LK[f]; if (!lk) continue;
-    for (let i=0;i<3;i++) p[i] *= present ? lk[i] : 1-lk[i];
-    const s = p.reduce((a,b)=>a+b,0); if(s>0) p=p.map(v=>v/s);
+  var p = PPH_P.slice();
+  var keys = Object.keys(ev);
+  for (var i=0; i<keys.length; i++) {
+    var f = keys[i]; var present = ev[f];
+    var lk = PPH_LK[f]; if (!lk) continue;
+    for (var j=0;j<3;j++) p[j] *= present ? lk[j] : 1-lk[j];
+    var s = p[0]+p[1]+p[2]; if(s>0){p[0]/=s;p[1]/=s;p[2]/=s;}
   }
-  const s=p.reduce((a,b)=>a+b,0); p=p.map(v=>v/s);
+  var s = p[0]+p[1]+p[2]; p[0]/=s;p[1]/=s;p[2]/=s;
   return p;
 }
 
-// ══════════════════════════════════════════════════════════
-// BAYESIAN — NEONATE (exact port of mnh_model.py)
-// ══════════════════════════════════════════════════════════
-const NEO_P = [0.12, 0.25, 0.63];
-const NEO_LK = {
+// ══════════════════════════════════════════════
+// BAYESIAN — NEONATE
+// ══════════════════════════════════════════════
+var NEO_P = [0.12, 0.25, 0.63];
+var NEO_LK = {
   not_breathing:[.92,.25,.02], no_cry:[.88,.30,.03], weak_cry:[.55,.62,.18],
   cyanosis_central:[.78,.42,.08], cyanosis_periph:[.32,.55,.35],
   limp_tone:[.82,.38,.06], hr_below_100:[.85,.40,.05],
   prolonged_labour:[.40,.45,.25], fetal_distress:[.68,.45,.12],
   cord_prolapse:[.88,.25,.03], thick_meconium:[.62,.48,.15],
-  preterm_lt34:[.52,.45,.18],
+  preterm_lt34:[.52,.45,.18]
 };
 
 function bayesNeo(ev) {
-  let p = [...NEO_P];
-  for (const [f, present] of Object.entries(ev)) {
-    const lk = NEO_LK[f]; if (!lk) continue;
-    for (let i=0;i<3;i++) p[i] *= present ? lk[i] : 1-lk[i];
-    const s = p.reduce((a,b)=>a+b,0); if(s>0) p=p.map(v=>v/s);
+  var p = NEO_P.slice();
+  var keys = Object.keys(ev);
+  for (var i=0; i<keys.length; i++) {
+    var f = keys[i]; var present = ev[f];
+    var lk = NEO_LK[f]; if (!lk) continue;
+    for (var j=0;j<3;j++) p[j] *= present ? lk[j] : 1-lk[j];
+    var s = p[0]+p[1]+p[2]; if(s>0){p[0]/=s;p[1]/=s;p[2]/=s;}
   }
-  const s=p.reduce((a,b)=>a+b,0); p=p.map(v=>v/s);
+  var s = p[0]+p[1]+p[2]; p[0]/=s;p[1]/=s;p[2]/=s;
   return p;
 }
 
-// ══════════════════════════════════════════════════════════
-// ACTION LISTS
-// ══════════════════════════════════════════════════════════
-const CAT_COL = {HIGH:'#B91C1C',MODERATE:'#B45309',LOW:'#047857'};
-const CAT_PROB_COL = {HIGH:'#EF4444',MODERATE:'#F59E0B',LOW:'#10B981'};
-const CAT_SUB = {HIGH:'Immediate intervention required',MODERATE:'Close monitoring — escalate if no improvement',LOW:'Standard protocol — continue monitoring'};
+// ══════════════════════════════════════════════
+// CONSTANTS
+// ══════════════════════════════════════════════
+var CAT_COL = {HIGH:'#B91C1C', MODERATE:'#B45309', LOW:'#047857'};
+var CAT_PCOL = {HIGH:'#EF4444', MODERATE:'#F59E0B', LOW:'#10B981'};
+var CAT_SUB = {
+  HIGH:'Immediate intervention required',
+  MODERATE:'Close monitoring — escalate if no improvement',
+  LOW:'Standard protocol — continue monitoring'
+};
 
 function pphActions(cat) {
-  const base = [
+  var base = [
     'Shout for help — do not leave the patient',
-    'IV access ×2 large bore (14–16G) immediately',
+    'IV access x2 large bore (14-16G) immediately',
     'Uterine massage — bimanual compression if uterus not firm',
     'Oxytocin 10 IU IM stat (if not already given)',
-    'IV crystalloid 1L rapidly',
+    'IV crystalloid 1L rapidly'
   ];
-  if (cat==='HIGH') return ['IMMEDIATE — haemorrhagic emergency','Call most senior clinician NOW',...base,
+  if (cat==='HIGH') return ['IMMEDIATE — haemorrhagic emergency','Call most senior clinician NOW'].concat(base).concat([
     'Misoprostol 800 mcg sublingual if oxytocin unavailable',
     'Tranexamic acid 1g IV over 10 minutes if available',
-    'Stabilise then urgent referral — do not delay transfer waiting for improvement',
-    'Blood transfusion if Hb <7 or ongoing haemodynamic instability'];
-  if (cat==='MODERATE') return [...base,'BP and pulse every 5 minutes',
-    'Inspect carefully for perineal and cervical tears',
-    'Escalate immediately if no improvement in 15 minutes'];
-  return ['Continue standard post-partum monitoring','Confirm oxytocin 10 IU IM given',
-    'Vitals every 15 minutes for 2 hours','Document total estimated blood loss accurately'];
+    'Stabilise then urgent referral',
+    'Blood transfusion if Hb less than 7 or ongoing instability'
+  ]);
+  if (cat==='MODERATE') return base.concat([
+    'BP and pulse every 5 minutes',
+    'Inspect for perineal and cervical tears',
+    'Escalate if no improvement in 15 minutes'
+  ]);
+  return [
+    'Continue standard post-partum monitoring',
+    'Confirm oxytocin 10 IU IM given',
+    'Vitals every 15 minutes for 2 hours',
+    'Document total estimated blood loss'
+  ];
 }
 
 function neoActions(cat) {
-  if (cat==='HIGH') return ['IMMEDIATE NEONATAL RESUSCITATION',
-    'Warm, dry, stimulate — 30 seconds MAXIMUM. Use the timer.',
-    'Not breathing after 30s: Bag-Mask Ventilation 40–60 breaths/min',
-    'HR <60 after 30s BMV: chest compressions + ventilation (3:1 ratio)',
+  if (cat==='HIGH') return [
+    'IMMEDIATE NEONATAL RESUSCITATION',
+    'Warm, dry, stimulate — 30 seconds MAXIMUM',
+    'Not breathing after 30s: Bag-Mask Ventilation 40-60 breaths/min',
+    'HR below 60 after 30s BMV: chest compressions + ventilation (3:1)',
     'Call most senior clinician immediately',
-    'Prepare urgent referral if no NICU on site'];
-  if (cat==='MODERATE') return ['Warm and dry immediately',
+    'Prepare urgent referral if no NICU on site'
+  ];
+  if (cat==='MODERATE') return [
+    'Warm and dry immediately',
     'Stimulate — rub back firmly, flick feet',
     'Sniffing position — open airway',
     'If no improvement in 30 seconds: begin Bag-Mask Ventilation',
     'Monitor HR and colour continuously',
-    'APGAR at 1 minute and 5 minutes'];
-  return ['Dry and warm','Skin-to-skin with mother immediately',
+    'APGAR at 1 minute and 5 minutes'
+  ];
+  return [
+    'Dry and warm',
+    'Skin-to-skin with mother immediately',
     'Initiate breastfeeding within 1 hour',
-    'APGAR at 1 minute and 5 minutes','Routine newborn examination'];
+    'APGAR at 1 minute and 5 minutes',
+    'Routine newborn examination'
+  ];
 }
 
-// ══════════════════════════════════════════════════════════
-// REFERRAL LOGIC
-// ══════════════════════════════════════════════════════════
-function calcReferral(category, sbp, pulse) {
-  const dist = document.querySelector('input[name="ref_dist"]:checked')?.value;
-  const transport = document.querySelector('input[name="ref_transport"]:checked')?.value;
-  const shock = sbp < 90 || pulse > 120;
-
-  if (category === 'HIGH' || shock) {
-    return {
-      icon: '🚨', color: '#B91C1C',
-      msg: 'Refer IMMEDIATELY',
-      sub: shock ? 'Haemodynamic instability — do not wait for transport. Stabilise en route.' :
-        'High risk PPH — refer regardless of distance or transport availability.'
-    };
-  }
-  if (category === 'MODERATE' && dist === 'far' && transport === 'no') {
-    return {
-      icon: '⚠️', color: '#B45309',
-      msg: 'Stabilise first, then refer urgently',
-      sub: 'Distance and transport constraints — achieve haemostasis before transfer. Reassess in 15 min.'
-    };
-  }
-  if (category === 'MODERATE') {
-    return {
-      icon: '⚠️', color: '#B45309',
-      msg: 'Refer within 1 hour if no improvement',
-      sub: 'Respond to oxytocin and uterine massage first. Escalate immediately if deteriorates.'
-    };
-  }
-  return {
-    icon: '✅', color: '#047857',
-    msg: 'Can manage at current facility',
-    sub: 'Low risk. Monitor closely. Refer if any deterioration in next 2 hours.'
-  };
-}
-
-// ══════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════
 // RENDER HELPERS
-// ══════════════════════════════════════════════════════════
-function renderBars(id, posterior) {
-  document.getElementById(id).innerHTML = Object.entries(posterior).map(([cat,prob])=>`
-    <div class="prow">
-      <span class="plbl">${cat}</span>
-      <div class="pbwrap"><div class="pbar" style="width:${(prob*100).toFixed(1)}%;background:${CAT_PROB_COL[cat]}"></div></div>
-      <span class="ppct">${(prob*100).toFixed(1)}%</span>
-    </div>`).join('');
-}
-
-function renderActions(id, actions, cat) {
-  document.getElementById(id).innerHTML = actions.map((a,i)=>{
-    let cls = 'norm';
-    if (cat==='HIGH' && i<2) cls='crit';
-    else if (cat==='HIGH') cls='high';
-    else if (cat==='MODERATE' && i===0) cls='high';
-    return `<div class="em-action ${cls}"><span style="opacity:.5;font-family:var(--mono);font-size:11px;margin-right:8px">${String(i+1).padStart(2,'0')}</span>${a}</div>`;
+// ══════════════════════════════════════════════
+function renderBars(id, high, mod, low) {
+  var el = document.getElementById(id);
+  var data = [{l:'HIGH',v:high,c:CAT_PCOL.HIGH},{l:'MODERATE',v:mod,c:CAT_PCOL.MODERATE},{l:'LOW',v:low,c:CAT_PCOL.LOW}];
+  el.innerHTML = data.map(function(d){
+    return '<div class="prow"><span class="plbl">'+d.l+'</span><div class="pbwrap"><div class="pbar" style="width:'+(d.v*100).toFixed(1)+'%;background:'+d.c+'"></div></div><span class="ppct">'+(d.v*100).toFixed(1)+'%</span></div>';
   }).join('');
 }
 
-// ══════════════════════════════════════════════════════════
-// CALCULATE PPH
-// ══════════════════════════════════════════════════════════
-function calcPPH() {
-  const sbp = +document.getElementById('p_sbp').value;
-  const pulse = +document.getElementById('p_pulse').value;
-  const spo2 = +document.getElementById('p_spo2').value;
+function renderActions(id, actions, cat) {
+  var el = document.getElementById(id);
+  el.innerHTML = actions.map(function(a, i){
+    var cls = 'norm';
+    if (cat==='HIGH' && i<2) cls='crit';
+    else if (cat==='HIGH') cls='high';
+    else if (cat==='MODERATE' && i===0) cls='high';
+    return '<div class="em-act '+cls+'"><span style="opacity:.4;font-family:var(--mono);font-size:10px;margin-right:8px">'+(i+1<10?'0'+(i+1):i+1)+'</span>'+a+'</div>';
+  }).join('');
+}
 
-  const ev = {
-    shock_bp: sbp < 90, tachycardia: pulse > 100, severe_tachy: pulse > 120,
-    low_spo2: spo2 < 94,
-    soaked_2_pads: document.getElementById('p_pads').checked,
-    passing_clots: document.getElementById('p_clots').checked,
-    bleeding_ongoing: document.getElementById('p_ongoing').checked,
-    uterus_not_firm: document.getElementById('p_uterus').checked,
-    perineal_tear: document.getElementById('p_tear').checked,
+// ══════════════════════════════════════════════
+// BLOOD LOSS PICKER
+// ══════════════════════════════════════════════
+function pickBL(el, vol) {
+  document.querySelectorAll('.bl-card').forEach(function(c){ c.classList.remove('selected'); });
+  el.classList.add('selected');
+  selectedBL = vol;
+}
+
+// ══════════════════════════════════════════════
+// REFERRAL LOGIC
+// ══════════════════════════════════════════════
+function calcReferral(cat, sbp, pulse) {
+  var distEl = document.querySelector('input[name="ref_dist"]:checked');
+  var transEl = document.querySelector('input[name="ref_transport"]:checked');
+  var dist = distEl ? distEl.value : null;
+  var trans = transEl ? transEl.value : null;
+  var shock = sbp < 90 || pulse > 120;
+  if (cat==='HIGH' || shock) return {icon:'🚨',col:'#B91C1C',tcol:'#FCA5A5',msg:'Refer IMMEDIATELY',sub:'Do not wait for transport. Stabilise en route.'};
+  if (cat==='MODERATE' && dist==='far' && trans==='no') return {icon:'⚠️',col:'#B45309',tcol:'#FCD34D',msg:'Stabilise first, then refer urgently',sub:'Distance and transport constraints. Achieve haemostasis before transfer.'};
+  if (cat==='MODERATE') return {icon:'⚠️',col:'#B45309',tcol:'#FCD34D',msg:'Refer within 1 hour if no improvement',sub:'Escalate immediately if patient deteriorates.'};
+  return {icon:'✅',col:'#047857',tcol:'#6EE7B7',msg:'Can manage at current facility',sub:'Monitor closely. Refer if any deterioration in next 2 hours.'};
+}
+
+// ══════════════════════════════════════════════
+// CALCULATE PPH
+// ══════════════════════════════════════════════
+function calcPPH() {
+  var sbp   = parseInt(document.getElementById('p_sbp').value)   || 100;
+  var pulse = parseInt(document.getElementById('p_pulse').value) || 90;
+  var spo2  = parseInt(document.getElementById('p_spo2').value)  || 97;
+
+  var ev = {
+    shock_bp:          sbp < 90,
+    tachycardia:       pulse > 100,
+    severe_tachy:      pulse > 120,
+    low_spo2:          spo2 < 94,
+    soaked_2_pads:     document.getElementById('p_pads').checked,
+    passing_clots:     document.getElementById('p_clots').checked,
+    bleeding_ongoing:  document.getElementById('p_ongoing').checked,
+    uterus_not_firm:   document.getElementById('p_uterus').checked,
+    perineal_tear:     document.getElementById('p_tear').checked,
     retained_placenta: document.getElementById('p_placenta').checked,
-    pallor: document.getElementById('p_pallor').checked,
+    pallor:            document.getElementById('p_pallor').checked,
     altered_conscious: document.getElementById('p_conscious').checked,
-    grand_multipara: document.getElementById('p_multi').checked,
-    prolonged_labour: document.getElementById('p_prolonged').checked,
-    prev_pph: document.getElementById('p_prev').checked,
-    anaemia_known: document.getElementById('p_anaemia').checked,
+    grand_multipara:   document.getElementById('p_multi').checked,
+    prolonged_labour:  document.getElementById('p_prolonged').checked,
+    prev_pph:          document.getElementById('p_prev').checked,
+    anaemia_known:     document.getElementById('p_anaemia').checked
   };
 
-  const post = bayesPPH(ev);
-  const cats = ['HIGH','MODERATE','LOW'];
-  let cat = cats[post.indexOf(Math.max(...post))];
+  var post = bayesPPH(ev);
+  var cats = ['HIGH','MODERATE','LOW'];
+  var cat = cats[post.indexOf(Math.max(post[0],post[1],post[2]))];
   if (sbp < 90) cat = 'HIGH';
 
-  const posterior = {HIGH:+post[0].toFixed(3),MODERATE:+post[1].toFixed(3),LOW:+post[2].toFixed(3)};
+  saveRecord({type:'PPH', category:cat, sbp:sbp, pulse:pulse, spo2:spo2, bloodLoss:selectedBL});
 
-  saveRecord({ type:'PPH', category:cat, sbp, pulse, spo2, bloodLoss:selectedBL, synced:false });
-
-  // Render result card
   document.getElementById('pphCard').style.background = CAT_COL[cat];
   document.getElementById('pphCat').textContent = cat;
   document.getElementById('pphSub').textContent = CAT_SUB[cat];
-  renderBars('pphBars', posterior);
+  renderBars('pphBars', post[0], post[1], post[2]);
   renderActions('pphActions', pphActions(cat), cat);
 
-  // Referral decision
-  const ref = calcReferral(cat, sbp, pulse);
-  document.getElementById('pphRefDecision').innerHTML = `
-    <div class="ref-decision" style="background:${ref.color}22;border:1px solid ${ref.color}55">
-      <div class="ref-icon">${ref.icon}</div>
-      <div class="ref-msg" style="color:${ref.color === '#B91C1C' ? '#FCA5A5' : ref.color === '#B45309' ? '#FCD34D' : '#6EE7B7'}">${ref.msg}</div>
-      <div class="ref-sub">${ref.sub}</div>
-    </div>`;
+  var ref = calcReferral(cat, sbp, pulse);
+  document.getElementById('pphRefBox').innerHTML =
+    '<div style="background:'+ref.col+'22;border:1px solid '+ref.col+'55;border-radius:12px;padding:16px;text-align:center;margin-bottom:12px">' +
+    '<div style="font-size:28px;margin-bottom:6px">'+ref.icon+'</div>' +
+    '<div style="font-size:15px;font-weight:700;color:'+ref.tcol+'">'+ref.msg+'</div>' +
+    '<div style="font-size:12px;color:var(--muted);margin-top:4px">'+ref.sub+'</div></div>';
 
-  navResult('pagePPHResults', 'pph');
+  goTo('pagePPHResults','nPPH','PPH','pph');
 }
 
-// ══════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════
 // CALCULATE NEONATE
-// ══════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════
 function calcNeo() {
-  const ev = {
-    not_breathing: document.getElementById('n_notbreathing').checked,
-    no_cry: document.getElementById('n_nocry').checked,
-    weak_cry: document.getElementById('n_weakcry').checked,
+  var ev = {
+    not_breathing:    document.getElementById('n_notbreathing').checked,
+    no_cry:           document.getElementById('n_nocry').checked,
+    weak_cry:         document.getElementById('n_weakcry').checked,
     cyanosis_central: document.getElementById('n_cyanosisc').checked,
-    cyanosis_periph: document.getElementById('n_cyanosis_p').checked,
-    limp_tone: document.getElementById('n_limp').checked,
-    hr_below_100: document.getElementById('n_hr').checked,
+    cyanosis_periph:  document.getElementById('n_cyanosis_p').checked,
+    limp_tone:        document.getElementById('n_limp').checked,
+    hr_below_100:     document.getElementById('n_hr').checked,
     prolonged_labour: document.getElementById('n_prolonged').checked,
-    fetal_distress: document.getElementById('n_distress').checked,
-    cord_prolapse: document.getElementById('n_cord').checked,
-    thick_meconium: document.getElementById('n_meconium').checked,
-    preterm_lt34: document.getElementById('n_preterm').checked,
+    fetal_distress:   document.getElementById('n_distress').checked,
+    cord_prolapse:    document.getElementById('n_cord').checked,
+    thick_meconium:   document.getElementById('n_meconium').checked,
+    preterm_lt34:     document.getElementById('n_preterm').checked
   };
 
-  const post = bayesNeo(ev);
-  const cats = ['HIGH','MODERATE','LOW'];
-  let cat = cats[post.indexOf(Math.max(...post))];
+  var post = bayesNeo(ev);
+  var cats = ['HIGH','MODERATE','LOW'];
+  var cat = cats[post.indexOf(Math.max(post[0],post[1],post[2]))];
   if (ev.not_breathing || ev.no_cry) cat = 'HIGH';
 
-  const posterior = {HIGH:+post[0].toFixed(3),MODERATE:+post[1].toFixed(3),LOW:+post[2].toFixed(3)};
-  const apgar = calcAPGAR();
-
-  saveRecord({ type:'NEO', category:cat, apgar1:apgar.score, synced:false });
+  var apgar = getAPGAR();
+  saveRecord({type:'NEO', category:cat, apgar:apgar.score});
 
   document.getElementById('neoCard').style.background = CAT_COL[cat];
   document.getElementById('neoCat').textContent = cat;
   document.getElementById('neoSub').textContent = CAT_SUB[cat];
 
-  const banner = document.getElementById('neoBanner');
-  banner.innerHTML = (cat==='HIGH'||cat==='MODERATE') ?
-    `<div class="wbox">30-Second Rule: Warm, dry, stimulate for 30 seconds. Reassess. If not breathing: Bag-Mask Ventilation now.</div>` : '';
+  document.getElementById('neoBanner').innerHTML = (cat==='HIGH'||cat==='MODERATE') ?
+    '<div class="wbox">30-Second Rule: Warm, dry, stimulate for 30 seconds. Reassess. If not breathing: Bag-Mask Ventilation now.</div>' : '';
 
-  // APGAR result
-  const aEl = document.getElementById('apgarResult');
   if (apgar.score !== null) {
-    const aColor = apgar.score >= 7 ? '#047857' : apgar.score >= 4 ? '#B45309' : '#B91C1C';
-    const aInterp = apgar.score >= 7 ? 'Reassuring — normal adaptation' : apgar.score >= 4 ? 'Moderate concern — observe closely' : 'Severely depressed — resuscitation required';
-    aEl.innerHTML = `
-      <div class="apgar-total" style="background:${aColor}22;border:1px solid ${aColor}55">
-        <div class="apgar-num" style="color:${aColor === '#047857' ? '#6EE7B7' : aColor === '#B45309' ? '#FCD34D' : '#FCA5A5'}">${apgar.score}</div>
-        <div class="apgar-interp" style="color:${aColor === '#047857' ? '#6EE7B7' : aColor === '#B45309' ? '#FCD34D' : '#FCA5A5'}">/10 — ${aInterp}</div>
-      </div>`;
-  } else { aEl.innerHTML = ''; }
+    var ac = apgar.score>=7?'#047857':apgar.score>=4?'#B45309':'#B91C1C';
+    var at = apgar.score>=7?'#6EE7B7':apgar.score>=4?'#FCD34D':'#FCA5A5';
+    var ai = apgar.score>=7?'Reassuring — normal adaptation':apgar.score>=4?'Moderate concern — observe closely':'Severely depressed — resuscitation required';
+    document.getElementById('apgarResult').innerHTML =
+      '<div class="apgar-total" style="background:'+ac+'22;border:1px solid '+ac+'55">' +
+      '<div class="apgar-score" style="color:'+at+'">'+apgar.score+'</div>' +
+      '<div style="font-size:13px;font-weight:600;color:'+at+';margin-top:4px">/10 — '+ai+'</div></div>';
+  } else {
+    document.getElementById('apgarResult').innerHTML = '';
+  }
 
-  renderBars('neoBars', posterior);
+  renderBars('neoBars', post[0], post[1], post[2]);
   renderActions('neoActions', neoActions(cat), cat);
-  navResult('pageNeoResults', 'neo');
+  goTo('pageNeoResults','nNeo','NEONATE','neo');
 }
 
-// ══════════════════════════════════════════════════════════
-// APGAR CALCULATOR
-// ══════════════════════════════════════════════════════════
-const APGAR_ITEMS = [
-  { key:'app', label:'Appearance (colour)', scores:['Blue/pale all over','Blue extremities, pink body','Pink all over'] },
-  { key:'pul', label:'Pulse (heart rate)',  scores:['Absent','Below 100 bpm','100 bpm or above'] },
-  { key:'gri', label:'Grimace (reflex)',    scores:['No response','Grimace only','Cry, cough, or sneeze'] },
-  { key:'act', label:'Activity (tone)',     scores:['Limp','Some flexion','Active motion'] },
-  { key:'res', label:'Respiration',         scores:['Absent','Slow / irregular','Good, crying'] },
+// ══════════════════════════════════════════════
+// APGAR
+// ══════════════════════════════════════════════
+var APGAR_ITEMS = [
+  {key:'app', label:'Appearance',  scores:['Blue/pale all','Blue extrem, pink body','Pink all over']},
+  {key:'pul', label:'Pulse',       scores:['Absent','Below 100 bpm','100 bpm or above']},
+  {key:'gri', label:'Grimace',     scores:['No response','Grimace only','Cry/cough/sneeze']},
+  {key:'act', label:'Activity',    scores:['Limp','Some flexion','Active motion']},
+  {key:'res', label:'Respiration', scores:['Absent','Slow/irregular','Good, crying']}
 ];
 
 function renderAPGAR() {
-  const html = `
-    <table class="apgar-table">
-      <thead><tr><th>COMPONENT</th><th>0</th><th>1</th><th>2</th></tr></thead>
-      <tbody>${APGAR_ITEMS.map(it=>`
-        <tr>
-          <td>${it.label}</td>
-          ${[0,1,2].map(v=>`
-            <td class="ascore">
-              <label title="${it.scores[v]}">
-                <input type="radio" name="apgar_${it.key}" value="${v}">
-                <span>${v}</span>
-              </label>
-            </td>`).join('')}
-        </tr>`).join('')}
-      </tbody>
-    </table>
-    <div style="text-align:right;font-size:12px;color:var(--muted)">Hover/tap score cells for criteria description</div>`;
-  document.getElementById('apgarSection').innerHTML = html;
-
-  // Live score update
-  document.getElementById('apgarSection').addEventListener('change', () => {
-    const s = calcAPGAR().score;
-    if (s !== null) {
-      const col = s>=7?'#6EE7B7':s>=4?'#FCD34D':'#FCA5A5';
-      const interp = s>=7?'Reassuring':s>=4?'Moderate concern':'Severely depressed';
-      document.getElementById('apgarSection').querySelector('div[style]').textContent =
-        `APGAR: ${s}/10 — ${interp}`;
-      document.getElementById('apgarSection').querySelector('div[style]').style.color = col;
-    }
+  var html = '<table class="apgar-table"><thead><tr><th>Component</th><th>0</th><th>1</th><th>2</th></tr></thead><tbody>';
+  APGAR_ITEMS.forEach(function(it){
+    html += '<tr><td>'+it.label+'</td>';
+    [0,1,2].forEach(function(v){
+      html += '<td class="ascore"><label title="'+it.scores[v]+'"><input type="radio" name="apgar_'+it.key+'" value="'+v+'" onchange="liveAPGAR()"><span style="pointer-events:none">'+v+'</span></label></td>';
+    });
+    html += '</tr>';
   });
+  html += '</tbody></table><div id="apgarLive" style="font-size:12px;color:var(--muted);text-align:right;margin-bottom:4px">Tap score cells (hover for criteria)</div>';
+  document.getElementById('apgarSection').innerHTML = html;
 }
 
-function calcAPGAR() {
-  let score = 0; let complete = true;
-  for (const it of APGAR_ITEMS) {
-    const sel = document.querySelector(`input[name="apgar_${it.key}"]:checked`);
-    if (!sel) { complete = false; break; }
-    score += +sel.value;
+function liveAPGAR() {
+  var r = getAPGAR();
+  var el = document.getElementById('apgarLive');
+  if (r.score !== null) {
+    var c = r.score>=7?'#6EE7B7':r.score>=4?'#FCD34D':'#FCA5A5';
+    var i = r.score>=7?'Reassuring':r.score>=4?'Moderate concern':'Severely depressed';
+    el.textContent = 'APGAR: '+r.score+'/10 — '+i;
+    el.style.color = c;
   }
-  return { score: complete ? score : null };
 }
 
-// ══════════════════════════════════════════════════════════
-// BLOOD LOSS SELECTOR
-// ══════════════════════════════════════════════════════════
-function selectBL(el, vol) {
-  document.querySelectorAll('.bl-card').forEach(c => c.classList.remove('selected'));
-  el.classList.add('selected');
-  selectedBL = vol;
+function getAPGAR() {
+  var score = 0; var complete = true;
+  APGAR_ITEMS.forEach(function(it){
+    var sel = document.querySelector('input[name="apgar_'+it.key+'"]:checked');
+    if (!sel) { complete = false; } else { score += parseInt(sel.value); }
+  });
+  return {score: complete ? score : null};
 }
 
-// ══════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════
 // DRUG REFERENCE
-// ══════════════════════════════════════════════════════════
-const PPH_DRUGS = [
-  { name:'Oxytocin', rows:[
-    ['Dose','10 IU IM — give immediately after delivery of anterior shoulder'],
-    ['PPH','10 IU IM stat, then 20 IU in 1L saline IV over 4 hours'],
-    ['Note','Preferred uterotonic at all facility levels. Refrigerate if possible.'],
-  ]},
-  { name:'Misoprostol (if no oxytocin)', rows:[
-    ['Dose','800 mcg sublingual stat'],
-    ['Alt','600 mcg oral if sublingual not tolerated'],
-    ['Note','Heat-stable alternative for PHC without cold chain. WHO-approved.'],
-  ]},
-  { name:'Tranexamic Acid', rows:[
-    ['Dose','1g IV over 10 minutes — give within 3 hours of birth'],
-    ['Repeat','1g IV if bleeding continues after 30 min or restarts'],
-    ['Note','WOMAN trial: reduces PPH mortality. Give early. Do not give IM.'],
-  ]},
-  { name:'Ergometrine', rows:[
-    ['Dose','0.5 mg IM or slow IV'],
-    ['Avoid','Hypertension, pre-eclampsia, cardiac disease'],
-    ['Note','Second-line. Causes vasoconstriction — caution in hypertensive patients.'],
-  ]},
-  { name:'IV Fluid', rows:[
-    ['First','1L Normal saline or Ringer's Lactate rapidly'],
-    ['Max','2–3L crystalloid. Avoid over-resuscitation — can worsen coagulopathy'],
-    ['Note','Bridge to blood transfusion. Not a substitute for surgical intervention.'],
-  ]},
+// ══════════════════════════════════════════════
+var PPH_DRUGS = [
+  {name:'Oxytocin', rows:[['Dose','10 IU IM — stat after anterior shoulder delivery'],['PPH','10 IU IM stat, then 20 IU in 1L saline IV over 4 hours'],['Note','First-line uterotonic. Refrigerate if possible.']]},
+  {name:'Misoprostol (if no oxytocin)', rows:[['Dose','800 mcg sublingual stat'],['Alt','600 mcg oral if sublingual not tolerated'],['Note','Heat-stable. WHO-approved for PHC without cold chain.']]},
+  {name:'Tranexamic Acid', rows:[['Dose','1g IV over 10 minutes — within 3 hours of birth'],['Repeat','1g IV if bleeding continues after 30 min or restarts'],['Note','WOMAN trial: reduces PPH mortality. Give early.']]},
+  {name:'Ergometrine', rows:[['Dose','0.5 mg IM or slow IV'],['Avoid','Hypertension, pre-eclampsia, cardiac disease'],['Note','Second-line. Causes vasoconstriction.']]},
+  {name:'IV Fluid', rows:[['First','1L Normal saline or Ringers Lactate rapidly'],['Max','2-3L crystalloid total. Avoid over-resuscitation.'],['Note','Bridge to transfusion — not a substitute for surgery.']]}
 ];
 
-const NEO_DRUGS = [
-  { name:'Bag-Mask Ventilation', rows:[
-    ['Rate','40–60 breaths per minute'],
-    ['Ratio','For compression-ventilation: 3:1 (3 compressions, 1 breath)'],
-    ['Mask','Fit over mouth AND nose. Visible chest rise = adequate ventilation.'],
-  ]},
-  { name:'Epinephrine (Adrenaline)', rows:[
-    ['Dose','0.1–0.3 ml/kg of 1:10,000 solution IV or UVC'],
-    ['Indication','HR <60 after 30 seconds of effective chest compressions + ventilation'],
-    ['Note','Only if confirmed IV/UVC access. Endotracheal use not recommended.'],
-  ]},
-  { name:'Vitamin K', rows:[
-    ['Dose','1 mg IM single dose at birth (all neonates)'],
-    ['Indication','Prophylaxis against haemorrhagic disease of newborn'],
-    ['Note','Give to all neonates — critical and often missed at PHC level.'],
-  ]},
-  { name:'Naloxone', rows:[
-    ['Dose','0.1 mg/kg IM or IV'],
-    ['Indication','Respiratory depression secondary to maternal opioid within 4 hours of delivery'],
-    ['Caution','Do NOT give if mother is on chronic opioids — precipitates withdrawal.'],
-  ]},
+var NEO_DRUGS = [
+  {name:'Bag-Mask Ventilation', rows:[['Rate','40-60 breaths per minute'],['Ratio','Compressions to ventilation: 3:1'],['Mask','Cover mouth AND nose. Chest rise = adequate ventilation.']]},
+  {name:'Epinephrine (Adrenaline)', rows:[['Dose','0.1-0.3 ml/kg of 1:10,000 IV or UVC'],['When','HR below 60 after 30s effective compressions + ventilation'],['Note','Only if confirmed IV/UVC access.']]},
+  {name:'Vitamin K', rows:[['Dose','1 mg IM single dose at birth — all neonates'],['Why','Prophylaxis: haemorrhagic disease of newborn'],['Note','Give to ALL neonates — often missed at PHC.']]},
+  {name:'Naloxone', rows:[['Dose','0.1 mg/kg IM or IV'],['When','Respiratory depression from maternal opioid within 4 hours'],['Caution','Do NOT give if mother on chronic opioids — precipitates withdrawal.']]}
 ];
 
 function renderDrugs(containerId, drugs) {
-  document.getElementById(containerId).innerHTML = drugs.map((d,i)=>`
-    <div class="drug-item">
-      <div class="drug-header" onclick="toggleDrug(${i},'${containerId}')">
-        <span class="drug-name">${d.name}</span>
-        <span class="drug-toggle" id="dt_${containerId}_${i}">+</span>
-      </div>
-      <div class="drug-body" id="db_${containerId}_${i}">
-        ${d.rows.map(r=>`<div class="drug-row"><span class="drug-key">${r[0]}</span><span>${r[1]}</span></div>`).join('')}
-      </div>
-    </div>`).join('');
+  var html = '';
+  drugs.forEach(function(d, i){
+    html += '<div class="drug-item">' +
+      '<div class="drug-hdr" onclick="toggleDrug(\'db_'+containerId+'_'+i+'\',\'dt_'+containerId+'_'+i+'\')">' +
+      '<span>'+d.name+'</span><span id="dt_'+containerId+'_'+i+'">+</span></div>' +
+      '<div class="drug-body" id="db_'+containerId+'_'+i+'">';
+    d.rows.forEach(function(r){
+      html += '<div class="drug-row"><span class="drug-key">'+r[0]+'</span><span>'+r[1]+'</span></div>';
+    });
+    html += '</div></div>';
+  });
+  document.getElementById(containerId).innerHTML = html;
 }
 
-function toggleDrug(i, cid) {
-  const body = document.getElementById(`db_${cid}_${i}`);
-  const tog = document.getElementById(`dt_${cid}_${i}`);
-  const open = body.classList.toggle('open');
-  tog.textContent = open ? '−' : '+';
-}
-
-// ══════════════════════════════════════════════════════════
-// EMERGENCY MODE
-// ══════════════════════════════════════════════════════════
-let timerInterval = null;
-let timerSecs = 30;
-let timerPhase = 0;
-
-const PPH_EM_STEPS = [
-  { q:'Is she bleeding heavily AND showing signs of shock?\n(Unconscious, BP <90, pulse >120, or cold/clammy)', yes:'shock', no:'stable' },
-];
-
-const PPH_PROTOCOLS = {
-  shock: {
-    title:'⚠ HAEMORRHAGIC SHOCK',
-    bg:'#B91C1C',
-    actions:[
-      {cls:'crit', text:'CALL FOR HELP — Do not leave the patient'},
-      {cls:'crit', text:'IV ACCESS ×2 large bore (14–16G) NOW'},
-      {cls:'high', text:'Oxytocin 10 IU IM stat'},
-      {cls:'high', text:'1L IV crystalloid rapidly'},
-      {cls:'high', text:'Bimanual uterine compression if uterus not firm'},
-      {cls:'norm', text:'Misoprostol 800mcg sublingual if no oxytocin'},
-      {cls:'norm', text:'Tranexamic acid 1g IV over 10 minutes if available'},
-      {cls:'norm', text:'Urgent referral — stabilise en route'},
-    ]
-  },
-  stable: {
-    title:'MODERATE PPH — ACT NOW',
-    bg:'#B45309',
-    actions:[
-      {cls:'high', text:'Shout for help'},
-      {cls:'high', text:'Oxytocin 10 IU IM stat'},
-      {cls:'norm', text:'IV access and crystalloid'},
-      {cls:'norm', text:'Uterine massage'},
-      {cls:'norm', text:'Inspect for tears'},
-      {cls:'norm', text:'BP and pulse every 5 minutes'},
-      {cls:'norm', text:'Escalate if no improvement in 15 minutes'},
-    ]
-  }
-};
-
-function startEmergency(type) {
-  const screen = document.getElementById('emScreen');
-  screen.classList.remove('hidden');
-  if (type === 'pph') {
-    screen.style.background = '#1A0A0A';
-    renderEmPPH();
+function toggleDrug(bodyId, togId) {
+  var body = document.getElementById(bodyId);
+  var tog  = document.getElementById(togId);
+  if (body.classList.contains('open')) {
+    body.classList.remove('open');
+    tog.textContent = '+';
   } else {
-    screen.style.background = '#1A0D08';
-    renderEmNeo();
+    body.classList.add('open');
+    tog.textContent = '−';
   }
 }
 
-function renderEmPPH() {
-  document.getElementById('emContent').innerHTML = `
-    <div class="em-title">PPH EMERGENCY MODE</div>
-    <div class="em-question">Is she in shock?\n(Unconscious, very low BP, pulse over 120, cold/clammy skin)</div>
-    <div class="em-btns">
-      <button class="em-btn yes" onclick="showEmProtocol('shock')">YES</button>
-      <button class="em-btn no" onclick="showEmProtocol('stable')">NO</button>
-    </div>
-    <button class="em-close" onclick="closeEm()">Close — complete full assessment instead</button>`;
-}
-
-function showEmProtocol(key) {
-  const p = PPH_PROTOCOLS[key];
-  document.getElementById('emContent').innerHTML = `
-    <div style="text-align:center;margin-bottom:16px">
-      <div style="font-size:18px;font-weight:700;color:white;font-family:var(--mono)">${p.title}</div>
-    </div>
-    <div class="em-protocol">
-      ${p.actions.map((a,i)=>`<div class="em-action ${a.cls}"><span style="opacity:.4;font-family:var(--mono);font-size:10px;margin-right:8px">${String(i+1).padStart(2,'0')}</span>${a.text}</div>`).join('')}
-    </div>
-    <div style="display:flex;gap:10px;margin-top:8px">
-      <button class="em-close" onclick="renderEmPPH()">← Back</button>
-      <button class="em-close" onclick="closeEm();nav('pph')" style="color:var(--accent2)">Complete Full Assessment →</button>
-    </div>`;
-}
-
-// ══════════════════════════════════════════════════════════
-// NEONATAL TIMER
-// ══════════════════════════════════════════════════════════
-const NEO_PHASES = [
-  { dur:30, label:'Phase 1: Initial Assessment', color:'#C2410C',
-    instruction:'Warm, dry, and stimulate the baby.\nRub the back firmly. Flick the feet.\nDo NOT stop early.' },
-  { dur:0,  label:'Reassess Now', color:'#B45309',
-    instruction:'Is the baby breathing normally?\nIs the cry strong?' },
-  { dur:30, label:'Phase 2: BMV if Not Breathing', color:'#B91C1C',
-    instruction:'Bag-Mask Ventilation: 40–60 breaths/min.\nWatch for chest rise.\nReposition mask if no rise.' },
-  { dur:0,  label:'Reassess HR + Breathing', color:'#7C3AED',
-    instruction:'Check heart rate.\nIs HR above 100?\nIs baby now breathing?' },
-];
-
-function renderEmNeo() {
-  clearInterval(timerInterval);
-  timerPhase = 0;
-  document.getElementById('emContent').innerHTML = `
-    <div class="timer-wrap">
-      <div class="timer-phase" id="tPhase">${NEO_PHASES[0].label}</div>
-      <div class="timer-ring" id="tRing">
-        <svg width="160" height="160" viewBox="0 0 160 160">
-          <circle class="bg" cx="80" cy="80" r="68"/>
-          <circle class="prog" id="tCircle" cx="80" cy="80" r="68"
-            stroke="${NEO_PHASES[0].color}"
-            stroke-dasharray="${2*Math.PI*68}"
-            stroke-dashoffset="0"/>
-        </svg>
-        <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center">
-          <div class="timer-num" id="tNum">30</div>
-        </div>
-      </div>
-      <div class="timer-instruction" id="tInstruct">${NEO_PHASES[0].instruction}</div>
-      <button class="timer-btn start" id="tBtn" onclick="timerAction()">START 30-SECOND TIMER</button>
-    </div>
-    <button class="em-close" onclick="closeEm()">Close — complete full assessment instead</button>`;
-
-  // Fix ring overlap
-  document.getElementById('tRing').style.position = 'relative';
-}
-
-let timerRunning = false;
-let currentPhaseDur = 30;
-
-function timerAction() {
-  const btn = document.getElementById('tBtn');
-  const phase = NEO_PHASES[timerPhase];
-
-  if (phase.dur === 0) {
-    // Reassessment prompt — show yes/no
-    timerPhase++;
-    if (timerPhase >= NEO_PHASES.length) {
-      document.getElementById('emContent').innerHTML = `
-        <div style="text-align:center;color:white">
-          <div style="font-size:18px;font-weight:700;margin-bottom:12px">Assessment Complete</div>
-          <div style="font-size:14px;color:var(--muted);margin-bottom:20px">Complete the full form to save this record and see Bayesian classification.</div>
-          <button class="em-close" onclick="closeEm();nav('neo')" style="color:var(--accent2)">Complete Full Assessment →</button>
-          <button class="em-close" style="margin-top:8px" onclick="closeEm()">Close</button>
-        </div>`;
-      return;
-    }
-    startTimerPhase();
-    return;
-  }
-
-  if (!timerRunning) {
-    startTimerPhase();
-  }
-}
-
-function startTimerPhase() {
-  const phase = NEO_PHASES[timerPhase];
-  if (!phase) return;
-
-  if (phase.dur === 0) {
-    // Show reassessment screen
-    document.getElementById('tPhase').textContent = phase.label;
-    document.getElementById('tInstruct').innerHTML = phase.instruction;
-    document.getElementById('tNum').textContent = '?';
-    document.getElementById('tCircle').style.strokeDashoffset = 0;
-    document.getElementById('tBtn').textContent = 'Next →';
-    document.getElementById('tBtn').className = 'timer-btn next';
-    return;
-  }
-
-  timerSecs = phase.dur;
-  currentPhaseDur = phase.dur;
-  timerRunning = true;
-  document.getElementById('tPhase').textContent = phase.label;
-  document.getElementById('tInstruct').innerHTML = phase.instruction;
-  document.getElementById('tCircle').style.stroke = phase.color;
-  document.getElementById('tBtn').textContent = 'Running...';
-  document.getElementById('tBtn').className = 'timer-btn stop';
-  document.getElementById('tBtn').onclick = () => {
-    clearInterval(timerInterval);
-    timerRunning = false;
-    document.getElementById('tBtn').textContent = 'Resume';
-    document.getElementById('tBtn').onclick = timerAction;
-  };
-
-  const circumference = 2 * Math.PI * 68;
-  clearInterval(timerInterval);
-  timerInterval = setInterval(() => {
-    timerSecs--;
-    document.getElementById('tNum').textContent = timerSecs;
-    const progress = timerSecs / currentPhaseDur;
-    document.getElementById('tCircle').style.strokeDashoffset = circumference * (1 - progress);
-
-    if (timerSecs <= 0) {
-      clearInterval(timerInterval);
-      timerRunning = false;
-      timerPhase++;
-      if (timerPhase < NEO_PHASES.length) {
-        startTimerPhase();
-      } else {
-        document.getElementById('tBtn').textContent = 'Assessment Complete';
-        document.getElementById('tBtn').className = 'timer-btn next';
-        document.getElementById('tBtn').onclick = () => { closeEm(); nav('neo'); };
-      }
-    }
-  }, 1000);
+// ══════════════════════════════════════════════
+// EMERGENCY MODE
+// ══════════════════════════════════════════════
+function openEmergency(type) {
+  var screen = document.getElementById('emScreen');
+  screen.classList.remove('hidden');
+  screen.style.background = type==='pph' ? '#1A0008' : '#0A100A';
+  if (type==='pph') renderEmPPH();
+  else renderEmNeo();
 }
 
 function closeEm() {
@@ -1090,115 +832,189 @@ function closeEm() {
   document.getElementById('emScreen').classList.add('hidden');
 }
 
-// ══════════════════════════════════════════════════════════
+function renderEmPPH() {
+  document.getElementById('emContent').innerHTML =
+    '<div style="font-family:var(--mono);font-size:11px;letter-spacing:2px;color:#F9A8D4;margin-bottom:14px">PPH EMERGENCY MODE</div>' +
+    '<div class="em-q">Is she in shock?<br><span style="font-size:14px;font-weight:400;color:#94A3B8">Unconscious, BP below 90, pulse over 120, or cold/clammy skin</span></div>' +
+    '<div class="em-btns"><button class="em-btn yes" onclick="showPPHProtocol(\'shock\')">YES</button><button class="em-btn no" onclick="showPPHProtocol(\'stable\')">NO</button></div>' +
+    '<button class="em-close" onclick="closeEm()">Close</button>';
+}
+
+function showPPHProtocol(key) {
+  var protocols = {
+    shock: {
+      title:'HAEMORRHAGIC SHOCK',
+      actions:[
+        {cls:'crit',text:'CALL FOR HELP — do not leave the patient'},
+        {cls:'crit',text:'IV ACCESS x2 large bore (14-16G) NOW'},
+        {cls:'high',text:'Oxytocin 10 IU IM stat'},
+        {cls:'high',text:'1L IV crystalloid rapidly'},
+        {cls:'high',text:'Bimanual uterine compression if uterus not firm'},
+        {cls:'norm',text:'Misoprostol 800mcg sublingual if no oxytocin'},
+        {cls:'norm',text:'Tranexamic acid 1g IV over 10 minutes if available'},
+        {cls:'norm',text:'Urgent referral — stabilise en route'}
+      ]
+    },
+    stable: {
+      title:'PPH — ACT NOW',
+      actions:[
+        {cls:'high',text:'Shout for help'},
+        {cls:'high',text:'Oxytocin 10 IU IM stat'},
+        {cls:'norm',text:'IV access and crystalloid'},
+        {cls:'norm',text:'Uterine massage'},
+        {cls:'norm',text:'Inspect for tears'},
+        {cls:'norm',text:'BP and pulse every 5 minutes'},
+        {cls:'norm',text:'Escalate if no improvement in 15 minutes'}
+      ]
+    }
+  };
+  var p = protocols[key];
+  var html = '<div style="font-family:var(--mono);font-size:13px;color:#F9A8D4;font-weight:700;margin-bottom:14px;text-align:center">'+p.title+'</div>';
+  p.actions.forEach(function(a,i){
+    html += '<div class="em-act '+a.cls+'"><span style="opacity:.4;font-family:var(--mono);font-size:10px;margin-right:8px">'+(i+1<10?'0'+(i+1):i+1)+'</span>'+a.text+'</div>';
+  });
+  html += '<div style="display:flex;gap:8px;margin-top:12px">' +
+    '<button class="em-close" onclick="renderEmPPH()">← Back</button>' +
+    '<button class="em-link" onclick="closeEm();goTo(\'pagePPH\',\'nPPH\',\'PPH\',\'pph\')">Full Assessment →</button></div>';
+  document.getElementById('emContent').innerHTML = html;
+}
+
+// ══════════════════════════════════════════════
+// NEONATAL TIMER
+// ══════════════════════════════════════════════
+var timerInterval = null;
+var timerRunning  = false;
+var timerSecs     = 30;
+var timerPhase    = 0;
+var timerPhaseDur = 30;
+
+var NEO_PHASES = [
+  {dur:30, label:'Phase 1 — Initial Assessment', color:'#C2410C',
+   inst:'Warm, dry, and stimulate the baby.\nRub the back firmly. Flick the feet.\nDo NOT stop before 30 seconds.'},
+  {dur:0,  label:'Reassess', color:'#B45309',
+   inst:'Is the baby breathing normally?\nIs the cry strong?'},
+  {dur:30, label:'Phase 2 — BMV if Not Breathing', color:'#B91C1C',
+   inst:'Bag-Mask Ventilation: 40-60 breaths/min.\nWatch for chest rise.\nReposition mask if no rise.'},
+  {dur:0,  label:'Reassess HR + Breathing', color:'#7C3AED',
+   inst:'Check heart rate.\nIs HR above 100?\nIs baby now breathing?'}
+];
+
+function renderEmNeo() {
+  timerPhase = 0; timerRunning = false; clearInterval(timerInterval);
+  var circ = 2 * Math.PI * 68;
+  document.getElementById('emContent').innerHTML =
+    '<div style="font-family:var(--mono);font-size:11px;letter-spacing:2px;color:#FED7AA;margin-bottom:14px">NEONATAL EMERGENCY</div>' +
+    '<div class="timer-wrap">' +
+    '<div class="timer-phase" id="tPhase">'+NEO_PHASES[0].label+'</div>' +
+    '<div class="timer-ring">' +
+    '<svg viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg"><circle cx="80" cy="80" r="68" fill="none" stroke="#172340" stroke-width="8"/><circle id="tCircle" cx="80" cy="80" r="68" fill="none" stroke="'+NEO_PHASES[0].color+'" stroke-width="8" stroke-linecap="round" stroke-dasharray="'+circ+'" stroke-dashoffset="0"/></svg>' +
+    '<div class="timer-num-wrap"><div class="timer-num" id="tNum">30</div></div></div>' +
+    '<div class="timer-inst" id="tInst">'+NEO_PHASES[0].inst.replace(/\n/g,'<br>')+'</div>' +
+    '<button class="timer-btn start" id="tBtn" onclick="timerStart()">START 30-SECOND TIMER</button>' +
+    '</div>' +
+    '<button class="em-close" onclick="closeEm()">Close</button>' +
+    '<button class="em-link" onclick="closeEm();goTo(\'pageNeo\',\'nNeo\',\'NEONATE\',\'neo\')" style="margin-top:8px">Full Assessment →</button>';
+}
+
+function timerStart() {
+  var phase = NEO_PHASES[timerPhase];
+  if (!phase) return;
+
+  if (phase.dur === 0) {
+    // Reassessment prompt
+    document.getElementById('tPhase').textContent = phase.label;
+    document.getElementById('tInst').innerHTML = phase.inst.replace(/\n/g,'<br>');
+    document.getElementById('tNum').textContent = '?';
+    var btn = document.getElementById('tBtn');
+    btn.textContent = 'Next Phase →';
+    btn.className = 'timer-btn next';
+    btn.onclick = function(){ timerPhase++; renderTimerPhase(); };
+    return;
+  }
+  renderTimerPhase();
+}
+
+function renderTimerPhase() {
+  var phase = NEO_PHASES[timerPhase];
+  if (!phase) {
+    // All done
+    document.getElementById('tPhase').textContent = 'Assessment Complete';
+    document.getElementById('tInst').textContent = 'Complete the full form to save this record.';
+    document.getElementById('tNum').textContent = '✓';
+    var btn = document.getElementById('tBtn');
+    btn.textContent = 'Go to Full Assessment';
+    btn.className = 'timer-btn next';
+    btn.onclick = function(){ closeEm(); goTo('pageNeo','nNeo','NEONATE','neo'); };
+    return;
+  }
+  if (phase.dur === 0) { timerStart(); return; }
+
+  timerSecs = phase.dur; timerPhaseDur = phase.dur; timerRunning = true;
+  document.getElementById('tPhase').textContent = phase.label;
+  document.getElementById('tInst').innerHTML = phase.inst.replace(/\n/g,'<br>');
+  var circ = 2 * Math.PI * 68;
+  var circle = document.getElementById('tCircle');
+  circle.setAttribute('stroke', phase.color);
+  circle.setAttribute('stroke-dashoffset', '0');
+  var btn = document.getElementById('tBtn');
+  btn.textContent = 'Running…';
+  btn.className = 'timer-btn stop';
+  btn.onclick = function(){
+    clearInterval(timerInterval); timerRunning = false;
+    btn.textContent = 'Resume'; btn.className = 'timer-btn start';
+    btn.onclick = function(){ renderTimerPhase(); };
+  };
+
+  clearInterval(timerInterval);
+  timerInterval = setInterval(function(){
+    timerSecs--;
+    var numEl = document.getElementById('tNum');
+    if (numEl) numEl.textContent = timerSecs;
+    var pct = timerSecs / timerPhaseDur;
+    var circEl = document.getElementById('tCircle');
+    if (circEl) circEl.setAttribute('stroke-dashoffset', circ*(1-pct));
+    if (timerSecs <= 0) {
+      clearInterval(timerInterval); timerRunning = false;
+      timerPhase++;
+      renderTimerPhase();
+    }
+  }, 1000);
+}
+
+// ══════════════════════════════════════════════
 // ANALYTICS
-// ══════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════
 function renderAnalytics() {
-  const pph = records.filter(r=>r.type==='PPH');
-  const neo = records.filter(r=>r.type==='NEO');
-  document.getElementById('sPPH').textContent = pph.length;
-  document.getElementById('sPPHH').textContent = pph.filter(r=>r.category==='HIGH').length;
-  document.getElementById('sNeo').textContent = neo.length;
-  document.getElementById('sNeoH').textContent = neo.filter(r=>r.category==='HIGH').length;
+  var pph = records.filter(function(r){return r.type==='PPH';});
+  var neo = records.filter(function(r){return r.type==='NEO';});
+  document.getElementById('sPPH').textContent  = pph.length;
+  document.getElementById('sPPHH').textContent = pph.filter(function(r){return r.category==='HIGH';}).length;
+  document.getElementById('sNeo').textContent  = neo.length;
+  document.getElementById('sNeoH').textContent = neo.filter(function(r){return r.category==='HIGH';}).length;
 
-  const unsynced = records.filter(r=>!r.synced).length;
-  const sEl = document.getElementById('syncStatus');
-  if (!API_URL) {
-    sEl.innerHTML = `<div class="ibox">Offline storage only. To enable cloud sync: add your API_URL to the HTML file and redeploy to GitHub Pages.</div>`;
-  } else if (unsynced > 0) {
-    sEl.innerHTML = `<div class="wbox">${unsynced} record(s) pending sync. Will upload automatically when online.</div>`;
-  } else {
-    sEl.innerHTML = `<div class="obox">All records synced.</div>`;
-  }
+  var unsynced = records.filter(function(r){return !r.synced;}).length;
+  document.getElementById('syncMsg').innerHTML = !API_URL ?
+    '<div class="ibox">Offline storage only. Set API_URL in the file to enable cloud sync.</div>' :
+    unsynced > 0 ?
+    '<div class="wbox">'+unsynced+' record(s) pending sync. Will upload when online.</div>' :
+    '<div class="obox">All records synced.</div>';
 
-  const aEl = document.getElementById('analyticsRecs');
+  var aEl = document.getElementById('analyticsRecs');
   if (!records.length) { aEl.innerHTML='<div class="ibox">No assessments yet.</div>'; return; }
-  aEl.innerHTML = `
-    <div class="lbl">Recent Records</div>
-    <div style="overflow-x:auto">
-    <table style="width:100%;border-collapse:collapse;font-size:11px">
-      <thead><tr>
-        ${['TIME','TYPE','CATEGORY','SYNC'].map(h=>`<th style="background:var(--surface2);color:var(--muted);padding:7px 8px;text-align:left;font-family:var(--mono);font-size:9px;letter-spacing:1px;border-bottom:1px solid var(--border)">${h}</th>`).join('')}
-      </tr></thead>
-      <tbody>${records.slice(0,40).map(r=>`
-        <tr>
-          <td style="padding:6px 8px;border-bottom:1px solid var(--border)">${r.timestamp.slice(11,16)}</td>
-          <td style="padding:6px 8px;border-bottom:1px solid var(--border)">${r.type}</td>
-          <td style="padding:6px 8px;border-bottom:1px solid var(--border);font-weight:700;color:${CAT_PROB_COL[r.category]}">${r.category}</td>
-          <td style="padding:6px 8px;border-bottom:1px solid var(--border);color:${r.synced?'#6EE7B7':'#FCD34D'}">${r.synced?'✓':'Pending'}</td>
-        </tr>`).join('')}
-      </tbody>
-    </table></div>`;
+  var rows = records.slice(0,40).map(function(r){
+    return '<tr><td style="padding:6px 8px;border-bottom:1px solid var(--border)">'+r.timestamp.slice(11,16)+'</td>' +
+      '<td style="padding:6px 8px;border-bottom:1px solid var(--border)">'+r.type+'</td>' +
+      '<td style="padding:6px 8px;border-bottom:1px solid var(--border);font-weight:700;color:'+CAT_PCOL[r.category]+'">'+r.category+'</td>' +
+      '<td style="padding:6px 8px;border-bottom:1px solid var(--border);color:'+(r.synced?'#6EE7B7':'#FCD34D')+'">'+(r.synced?'Synced':'Pending')+'</td></tr>';
+  }).join('');
+  aEl.innerHTML = '<div class="lbl">Recent Records</div><div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:11px">' +
+    '<thead><tr>'+['TIME','TYPE','CATEGORY','SYNC'].map(function(h){return '<th style="background:var(--surface2);color:var(--muted);padding:7px 8px;text-align:left;font-family:var(--mono);font-size:9px;letter-spacing:1px;border-bottom:1px solid var(--border)">'+h+'</th>';}).join('')+'</tr></thead>' +
+    '<tbody>'+rows+'</tbody></table></div>';
 }
 
-// ══════════════════════════════════════════════════════════
-// NAVIGATION
-// ══════════════════════════════════════════════════════════
-function navResult(pageId, parentKey) {
-  const m = NAV_MAP[parentKey];
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.getElementById(pageId).classList.add('active');
-  if (m) {
-    document.querySelectorAll('.nbtn').forEach(b => b.classList.remove('active'));
-    document.getElementById(m.btn).classList.add('active');
-    document.getElementById('hdrBadge').textContent = m.badge;
-    document.getElementById('hdrBadge').className = 'hdr-badge ' + m.bclass;
-  }
-}
-
-const NAV_MAP = {
-  menu:{page:'pageMenu',btn:'nMenu',badge:'MNH',bclass:'menu'},
-  pph:{page:'pagePPH',btn:'nPPH',badge:'PPH',bclass:'pph'},
-  neo:{page:'pageNeo',btn:'nNeo',badge:'NEONATE',bclass:'neo'},
-  pphresults:{page:'pagePPHResults',btn:'nPPH',badge:'PPH',bclass:'pph'},
-  neoresults:{page:'pageNeoResults',btn:'nNeo',badge:'NEONATE',bclass:'neo'},
-  analytics:{page:'pageAnalytics',btn:'nAnalytics',badge:'ANALYTICS',bclass:'menu'},
-};
-
-function nav(key) {
-  const m = NAV_MAP[key]; if(!m) return;
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.getElementById(m.page).classList.add('active');
-  document.querySelectorAll('.nbtn').forEach(b=>b.classList.remove('active'));
-  document.getElementById(m.btn).classList.add('active');
-  document.getElementById('hdrBadge').textContent = m.badge;
-  document.getElementById('hdrBadge').className = 'hdr-badge ' + m.bclass;
-  if (key==='analytics') renderAnalytics();
-}
-
-function setNav(label) {
-  const key = Object.entries(NAV_MAP).find(([k,v])=>v.btn==='n'+label)?.[0];
-  if (key) nav(key);
-}
-
-function resetPPH() {
-  ['p_sbp','p_pulse','p_spo2'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.value = id==='p_sbp'?100:id==='p_pulse'?90:97;
-  });
-  ['p_pads','p_clots','p_ongoing','p_uterus','p_tear','p_placenta','p_pallor','p_conscious',
-   'p_multi','p_prolonged','p_prev','p_anaemia'].forEach(id => {
-    const el = document.getElementById(id); if (el) el.checked = false;
-  });
-  document.querySelectorAll('input[name="ref_dist"], input[name="ref_transport"]').forEach(r => r.checked = false);
-  document.querySelectorAll('.ref-opt').forEach(o => o.classList.remove('selected'));
-  document.querySelectorAll('.bl-card').forEach(c => c.classList.remove('selected'));
-  selectedBL = 'Unknown';
-  nav('pph');
-}
-
-function resetNeo() {
-  ['n_notbreathing','n_nocry','n_weakcry','n_cyanosisc','n_cyanosis_p',
-   'n_limp','n_hr','n_prolonged','n_distress','n_cord','n_meconium','n_preterm'].forEach(id => {
-    const el = document.getElementById(id); if (el) el.checked = false;
-  });
-  renderAPGAR();
-  nav('neo');
-}
-
-// ══════════════════════════════════════════════════════════
-// INIT
-// ══════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════
+// INIT — runs once when page loads
+// ══════════════════════════════════════════════
 renderAPGAR();
 renderDrugs('pphDrugs', PPH_DRUGS);
 renderDrugs('neoDrugs', NEO_DRUGS);
