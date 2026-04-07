@@ -1,4 +1,4 @@
-# NaijaTriageAI
+# ToyinTriageAI
 
 > **A Bayesian clinical decision-support PWA for Nigerian Primary Health Centres — offline-first, zero-dependency, built for the realities of the last mile.**
 
